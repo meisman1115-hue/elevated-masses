@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api *)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sL https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/SKILL.md -o /tmp/SKILL.md)",
+      "Read(//tmp/**)",
+      "Bash(mkdir -p \"/c/Users/meism/AppData/Local/Temp/claude/C--Users-meism-Desktop-Website/0f10c62c-7c17-4282-8d3b-2646a8f33228/scratchpad/frontend-design\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/SKILL.md -o \"/c/Users/meism/AppData/Local/Temp/claude/C--Users-meism-Desktop-Website/0f10c62c-7c17-4282-8d3b-2646a8f33228/scratchpad/frontend-design/SKILL.md\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/LICENSE.txt -o \"/c/Users/meism/AppData/Local/Temp/claude/C--Users-meism-Desktop-Website/0f10c62c-7c17-4282-8d3b-2646a8f33228/scratchpad/frontend-design/LICENSE.txt\")",
+      "Read(//c/Users/meism/AppData/Local/Temp/claude/C--Users-meism-Desktop-Website/0f10c62c-7c17-4282-8d3b-2646a8f33228/scratchpad/frontend-design/**)",
+      "Bash(ls -la \"$HOME/.claude/skills\" 2>&1 | head -30)",
+      "Bash(mkdir -p 'C:\\\\Users\\\\meism/.claude/skills/frontend-design')",
+      "Bash(cp /c/Users/meism/AppData/Local/Temp/claude/C--Users-meism-Desktop-Website/0f10c62c-7c17-4282-8d3b-2646a8f33228/scratchpad/frontend-design/SKILL.md 'C:\\\\Users\\\\meism/.claude/skills/frontend-design/SKILL.md')",
+      "Bash(cp /c/Users/meism/AppData/Local/Temp/claude/C--Users-meism-Desktop-Website/0f10c62c-7c17-4282-8d3b-2646a8f33228/scratchpad/frontend-design/LICENSE.txt 'C:\\\\Users\\\\meism/.claude/skills/frontend-design/LICENSE.txt')",
+      "Bash(curl -sL https://api.github.com/repos/nextlevelbuilder/ui-ux-pro-max-skill/contents/)",
+      "Bash(curl -sL https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/main/package.json)",
+      "Bash(curl -sL https://raw.githubusercontent.com/nextlevelbuilder/ui-ux-pro-max-skill/main/skill.json)",
+      "Bash(curl -sL https://api.github.com/repos/nextlevelbuilder/ui-ux-pro-max-skill/contents/cli)",
+      "Bash(where node *)",
+      "Bash(where npm *)",
+      "Bash(where npx *)",
+      "Bash(npm -v)",
+      "PowerShell(node -v)",
+      "PowerShell(npm -v)",
+      "PowerShell(Test-Path \"C:\\\\Program Files\\\\nodejs\\\\node.exe\"; Test-Path \"$env:APPDATA\\\\npm\\\\npm.cmd\"; $env:PATH -split ';' | Select-String -Pattern \"nodejs\")",
+      "Bash(ls -la \"/c/Windows/System32/.claude/skills/ui-ux-pro-max\" 2>&1)",
+      "Bash(rm -rf \"/c/Windows/System32/.claude\")",
+      "Read(//c/Windows/System32/.claude/**)",
+      "Bash(ls -la \"/c/Windows/System32/.claude\" 2>&1)"
+    ]
+  }
+}

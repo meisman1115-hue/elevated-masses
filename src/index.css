@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    /* Subtle neon-green + ultraviolet ambient glows over near-black */
+    background-image:
+      radial-gradient(60% 50% at 80% -10%, rgba(168, 85, 247, 0.14), transparent 70%),
+      radial-gradient(55% 45% at 0% 0%, rgba(139, 255, 60, 0.10), transparent 70%);
+    background-repeat: no-repeat;
+  }
+
+  ::selection {
+    background: rgba(139, 255, 60, 0.3);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-display;
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-em {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+  }
+
+  .btn-primary {
+    @apply btn bg-green text-bg hover:shadow-glow-green hover:-translate-y-0.5 focus-visible:ring-green;
+  }
+
+  .btn-accent {
+    @apply btn bg-purple text-white hover:shadow-glow-purple hover:-translate-y-0.5 focus-visible:ring-purple;
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/15 bg-white/5 text-fg hover:border-green/60 hover:text-green focus-visible:ring-green;
+  }
+
+  .card {
+    @apply rounded-2xl border border-white/10 bg-surface/80 backdrop-blur-sm transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply card hover:border-green/40 hover:shadow-glow-green hover:-translate-y-1;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-muted;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-green;
+  }
+
+  .link-underline {
+    @apply relative text-muted transition-colors hover:text-fg;
+  }
+}
