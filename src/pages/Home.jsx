@@ -3,7 +3,9 @@ import {
   ArrowRight, Sprout, FileText, Wrench, Users, ShoppingBag,
   Leaf, MessageSquare, Calendar, ScanLine,
 } from 'lucide-react'
-import { MediaPlaceholder, VideoPlaceholder, SectionHeading } from '../components/ui.jsx'
+import { MediaPlaceholder, SectionHeading } from '../components/ui.jsx'
+import { GrowRoomScene, LeafMotif } from '../components/illustrations.jsx'
+import { posts } from '../lib/posts.js'
 
 const pillars = [
   { icon: FileText, title: 'Digital Blueprints', body: 'Downloadable hydroponic plans you can build at home — from a single bucket to a full vertical wall.' },
@@ -19,11 +21,7 @@ const quickLinks = [
   { icon: Leaf, title: 'Seeds', body: 'Genetics worth growing.', to: '/seeds' },
 ]
 
-const featuredPosts = [
-  { tag: 'Beginner', title: 'Your first DWC bucket: a weekend build', read: '6 min read' },
-  { tag: 'Troubleshooting', title: 'Reading nutrient deficiencies by leaf color', read: '9 min read' },
-  { tag: 'Gear', title: 'LED grow lights: what the specs actually mean', read: '7 min read' },
-]
+const featuredPosts = posts.slice(0, 3)
 
 export default function Home() {
   return (
@@ -73,7 +71,7 @@ export default function Home() {
           </div>
 
           <div className="animate-fade-up [animation-delay:120ms]">
-            <VideoPlaceholder label="Hero video — your grow room tour" />
+            <GrowRoomScene className="drop-shadow-[0_0_40px_rgba(139,255,60,0.15)]" />
           </div>
         </div>
       </section>
@@ -134,14 +132,14 @@ export default function Home() {
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {featuredPosts.map((post) => (
-            <article key={post.title} className="card-hover overflow-hidden">
+            <Link key={post.slug} to={`/blog/${post.slug}`} className="card-hover overflow-hidden">
               <MediaPlaceholder ratio="aspect-[16/10]" label="Post cover" className="rounded-none border-0 border-b border-white/10" />
               <div className="p-5">
                 <span className="chip">{post.tag}</span>
                 <h3 className="mt-3 text-lg font-600 leading-snug text-fg">{post.title}</h3>
-                <p className="mt-3 text-xs text-muted">{post.read}</p>
+                <p className="mt-3 text-xs text-muted">{post.readTime} read</p>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
@@ -165,7 +163,7 @@ export default function Home() {
                 Try Plant AI <ArrowRight size={16} />
               </Link>
             </div>
-            <MediaPlaceholder ratio="aspect-[4/3]" label="Plant diagnosis preview" icon={ScanLine} />
+            <LeafMotif />
           </div>
         </div>
       </section>

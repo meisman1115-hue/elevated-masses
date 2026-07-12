@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import Blog from './pages/Blog.jsx'
+import BlogPost from './pages/BlogPost.jsx'
 import Gear from './pages/Gear.jsx'
 import Seeds from './pages/Seeds.jsx'
 import Events from './pages/Events.jsx'
@@ -17,6 +18,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/gear" element={<Gear />} />
         <Route path="/seeds" element={<Seeds />} />
         <Route path="/events" element={<Events />} />
