@@ -5,8 +5,9 @@ import { FileText, Download, Lock, FileArchive, ClipboardList, Ruler } from 'luc
 // Downloadable resources. Set `file` to a real path in /public (or a URL) when
 // the file is ready; until then the button shows "Coming soon".
 const resources = [
-  { icon: Ruler, title: 'DWC Bucket Blueprint', desc: 'Printable plan + parts list for a single deep water culture bucket.', type: 'PDF', size: '—', file: null, cat: 'Blueprints' },
-  { icon: Ruler, title: 'Vertical NFT Wall Plan', desc: 'Dimensioned blueprint for a compact vertical NFT system.', type: 'PDF', size: '—', file: null, cat: 'Blueprints' },
+  { icon: Ruler, title: 'RDWC 1-Pot Build Guide', desc: 'Parts list + step-by-step assembly for a single-site recirculating DWC system.', type: 'PDF', size: '2 pages', file: '/downloads/rdwc-1-pot-build.pdf', cat: 'Blueprints' },
+  { icon: Ruler, title: 'RDWC 2-Pot Build Guide', desc: 'Two grow buckets on a shared control reservoir — full build walkthrough.', type: 'PDF', size: '2 pages', file: '/downloads/rdwc-2-pot-build.pdf', cat: 'Blueprints' },
+  { icon: Ruler, title: 'RDWC 4-Pot Build Guide', desc: 'A four-bucket recirculating loop with sizing for pumps and air.', type: 'PDF', size: '2 pages', file: '/downloads/rdwc-4-pot-build.pdf', cat: 'Blueprints' },
   { icon: ClipboardList, title: 'Nutrient Mixing Cheat Sheet', desc: 'Quick-reference EC/pH targets by growth stage.', type: 'PDF', size: '—', file: null, cat: 'Guides' },
   { icon: ClipboardList, title: 'Weekly Grow Checklist', desc: 'A printable routine so nothing slips between feedings.', type: 'PDF', size: '—', file: null, cat: 'Guides' },
   { icon: FileArchive, title: 'Beginner Starter Pack', desc: 'A bundle of the essentials to get your first grow going.', type: 'ZIP', size: '—', file: null, cat: 'Bundles' },
@@ -33,8 +34,8 @@ export default function Downloads() {
       <div className="container-em py-12">
         {!isConfigured && (
           <StubNote>
-            Accounts activate once Supabase is connected. After that, downloads unlock for signed-in members
-            and the buttons below go live.
+            Downloads are open for now while the account system is being set up. Once Supabase is connected,
+            they become members-only (a free account, same one used to post in the forum).
           </StubNote>
         )}
         {isConfigured && !user && (
@@ -67,24 +68,19 @@ export default function Downloads() {
                   <span>{r.size}</span>
                 </div>
 
-                {signedIn ? (
-                  available ? (
-                    <a href={r.file} download className="btn-primary mt-5 w-full">
-                      <Download size={15} /> Download
-                    </a>
-                  ) : (
-                    <button type="button" disabled className="btn-ghost mt-5 w-full opacity-50">
-                      File coming soon
-                    </button>
-                  )
+                {!available ? (
+                  <button type="button" disabled className="btn-ghost mt-5 w-full opacity-50">
+                    File coming soon
+                  </button>
+                ) : signedIn || !isConfigured ? (
+                  // Signed in, or accounts not set up yet → download is open.
+                  <a href={r.file} download className="btn-primary mt-5 w-full">
+                    <Download size={15} /> Download
+                  </a>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={isConfigured ? openAuthModal : undefined}
-                    className="btn-ghost mt-5 w-full"
-                    aria-disabled={!isConfigured || undefined}
-                  >
-                    <Lock size={15} /> {isConfigured ? 'Sign in to download' : 'Account required'}
+                  // Accounts live but not signed in → gate behind sign-in.
+                  <button type="button" onClick={openAuthModal} className="btn-ghost mt-5 w-full">
+                    <Lock size={15} /> Sign in to download
                   </button>
                 )}
               </div>

@@ -1,6 +1,7 @@
 import { PageHeader, MediaPlaceholder, StubNote } from '../components/ui.jsx'
 import { ExternalLink, Star, Info } from 'lucide-react'
 import { amazonLink } from '../lib/nav.js'
+import KitBuilder from '../components/KitBuilder.jsx'
 
 const categories = ['All', 'Grow Lights', 'Tents', 'Nutrients', 'Meters & Testers', 'Pumps & Air', 'Media & Pots']
 
@@ -34,6 +35,15 @@ export default function Gear() {
             <span className="font-600 text-fg">Affiliate disclosure:</span> As an Amazon Associate,
             Elevated Masses earns from qualifying purchases. Prices and availability are shown on Amazon.
           </p>
+        </div>
+
+        {/* Budget-based complete-kit builder */}
+        <div className="mt-8">
+          <KitBuilder />
+        </div>
+
+        <div className="mt-14 flex items-end justify-between gap-6">
+          <h2 className="text-2xl font-700 text-fg">Or browse gear individually</h2>
         </div>
 
         <StubNote>
