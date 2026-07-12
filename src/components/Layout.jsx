@@ -4,6 +4,7 @@ import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
 import AuthModal from './AuthModal.jsx'
 import AgeGate from './AgeGate.jsx'
+import SmokeBackground from './SmokeBackground.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 
 // Scrolls to top on route change so each page starts at the top.
@@ -19,6 +20,7 @@ export default function Layout({ children }) {
   const { authModalOpen, closeAuthModal } = useAuth()
   return (
     <div className="flex min-h-dvh flex-col">
+      <SmokeBackground />
       <ScrollToTop />
       <AgeGate />
       <AuthModal open={authModalOpen} onClose={closeAuthModal} />

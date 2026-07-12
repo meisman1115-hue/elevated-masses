@@ -42,10 +42,15 @@ export default {
           '0%, 100%': { opacity: '0.6' },
           '50%': { opacity: '1' },
         },
+        'smoke-drift': {
+          '0%, 100%': { transform: 'scale(1.25) rotate(0deg) translate(0, 0)' },
+          '50%': { transform: 'scale(1.32) rotate(2.5deg) translate(1.5%, -1.5%)' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 0.6s ease-out both',
         'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+        'smoke-drift': 'smoke-drift 32s ease-in-out infinite',
       },
     },
   },
