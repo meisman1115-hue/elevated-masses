@@ -41,8 +41,8 @@ export const allNavLinks = [
 
 export const AMAZON_TAG = 'mrgrowurown-20'
 
-// Placeholder — replace with the real Patreon page URL when it's live.
-export const PATREON_URL = 'https://www.patreon.com/'
+// Elevated Masses Patreon page.
+export const PATREON_URL = 'https://www.patreon.com/MrGrowUrOwn'
 
 // Helper to append the Amazon Associates tag to any amazon.com product URL.
 export function amazonLink(url) {
