@@ -28,7 +28,7 @@ export default function Footer() {
       <div className="container-em grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
         <div>
           <div className="flex items-center gap-2">
-            <img src="/elevated-masses-logo.jpg" alt="Elevated Masses" className="h-10 w-auto rounded-md ring-1 ring-white/10" />
+            <img src="/elevated-masses-wordmark.jpg" alt="Elevated Masses" className="h-11 w-auto rounded-md" />
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
             Urban hydroponics for the modern grower. Blueprints, builds, gear, seeds

@@ -29,15 +29,12 @@ export default function Navbar() {
       }`}
     >
       <nav className="container-em flex h-16 items-center justify-between gap-4" aria-label="Primary">
-        <Link to="/" className="flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-green">
+        <Link to="/" aria-label="Elevated Masses — home" className="flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-green">
           <img
-            src="/elevated-masses-logo.jpg"
+            src="/elevated-masses-wordmark.jpg"
             alt="Elevated Masses"
-            className="h-9 w-auto rounded-md ring-1 ring-white/10"
+            className="h-9 w-auto rounded-md sm:h-10"
           />
-          <span className="hidden font-display text-sm font-700 tracking-wide text-fg sm:block">
-            Elevated Masses
-          </span>
         </Link>
 
         {/* Desktop links */}
