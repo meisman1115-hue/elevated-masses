@@ -32,17 +32,34 @@ npm run preview # preview that production build locally
 | Gear (Amazon affiliate) | `/gear` | Affiliate tag wired: `mrgrowurown-20` |
 | Seeds | `/seeds` | Layout — awaiting affiliate partners |
 | Events | `/events` | Layout + placeholder events |
-| Forum | `/forum` | Layout only — needs a backend to go live |
+| Forum | `/forum` | Live once Supabase is connected (accounts + threads + replies) |
 | Plant AI | `/plant-ai` | Working demo UI — needs a real AI model |
 | About | `/about` | Placeholder copy |
 | Contact | `/contact` | Placeholder form |
 
-## What still needs a backend
+## Connecting Supabase (accounts + live forum)
 
-The **forum**, **user accounts**, **Plant AI model**, and functional **contact/newsletter forms**
-need a backend (a database + logins + file storage). Recommended next step: connect
-[Supabase](https://supabase.com) (free tier) for accounts, forum posts, and storing plant
-submissions, plus an AI service for real diagnoses.
+The forum and user accounts run on [Supabase](https://supabase.com) (free tier). Until it's
+connected, the site runs in a graceful "demo" mode. To go live:
+
+1. Create a free project at https://supabase.com (New project).
+2. In **Project Settings → API**, copy the **Project URL** and the **anon public** key.
+3. In this folder, copy `.env.example` to `.env` and paste those two values in.
+   Also add them in Vercel: Project → Settings → Environment Variables, named
+   `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+4. In Supabase, open **SQL Editor → New query**, paste the contents of
+   [`supabase/schema.sql`](supabase/schema.sql), and click **Run**. This creates the
+   profiles / threads / replies tables with security policies.
+5. Restart `npm run dev`. Sign up, confirm your email, and the forum is live.
+
+The anon key is a **public** key — it's safe in the browser. All access is controlled by the
+Row Level Security policies in `schema.sql` (anyone can read; only signed-in users can post;
+you can only edit or delete your own posts).
+
+## Still to do (backend)
+
+- **Plant AI**: connect a real AI model and store submitted photos to train it.
+- **Contact / newsletter forms**: wire to email (e.g. Formspree) or Supabase.
 
 ## Design system
 

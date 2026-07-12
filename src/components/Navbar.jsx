@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
-import { Menu, X, Sprout } from 'lucide-react'
+import { Menu, X, Sprout, LogOut, User } from 'lucide-react'
 import { navLinks } from '../lib/nav.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const { user, profile, isConfigured, openAuthModal, signOut } = useAuth()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -58,10 +60,31 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
-          <Link to="/plant-ai" className="hidden btn-primary md:inline-flex">
-            <Sprout size={16} aria-hidden="true" />
-            Diagnose a plant
-          </Link>
+          {isConfigured && user ? (
+            <div className="hidden items-center gap-2 md:flex">
+              <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-fg">
+                <User size={14} className="text-green" />
+                {profile?.username ?? 'You'}
+              </span>
+              <button
+                type="button"
+                onClick={signOut}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-muted hover:text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-green"
+                aria-label="Sign out"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : isConfigured ? (
+            <button type="button" onClick={openAuthModal} className="hidden btn-ghost md:inline-flex">
+              Sign in
+            </button>
+          ) : (
+            <Link to="/plant-ai" className="hidden btn-primary md:inline-flex">
+              <Sprout size={16} aria-hidden="true" />
+              Diagnose a plant
+            </Link>
+          )}
 
           <button
             type="button"
@@ -100,6 +123,19 @@ export default function Navbar() {
                 Diagnose a plant
               </Link>
             </li>
+            {isConfigured && (
+              <li className="mt-2">
+                {user ? (
+                  <button type="button" onClick={signOut} className="btn-ghost w-full">
+                    <LogOut size={16} /> Sign out ({profile?.username ?? 'you'})
+                  </button>
+                ) : (
+                  <button type="button" onClick={openAuthModal} className="btn-ghost w-full">
+                    <User size={16} /> Sign in
+                  </button>
+                )}
+              </li>
+            )}
           </ul>
         </div>
       )}
