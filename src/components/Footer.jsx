@@ -6,18 +6,21 @@ const columns = [
     title: 'Explore',
     links: [
       { label: 'Blog', to: '/blog' },
-      { label: 'Gear', to: '/gear' },
-      { label: 'Seeds', to: '/seeds' },
-      { label: 'Events', to: '/events' },
+      { label: 'Tutorials', to: '/tutorials' },
+      { label: 'Recipes', to: '/recipes' },
+      { label: 'Plant AI', to: '/plant-ai' },
+      { label: 'Downloads', to: '/downloads' },
     ],
   },
   {
     title: 'Community',
     links: [
       { label: 'Forum', to: '/forum' },
-      { label: 'Plant AI', to: '/plant-ai' },
+      { label: 'Events', to: '/events' },
+      { label: 'Membership', to: '/membership' },
+      { label: 'Gear', to: '/gear' },
+      { label: 'Seeds', to: '/seeds' },
       { label: 'About', to: '/about' },
-      { label: 'Contact', to: '/contact' },
     ],
   },
 ]

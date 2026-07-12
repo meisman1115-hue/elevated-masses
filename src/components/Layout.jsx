@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
 import AuthModal from './AuthModal.jsx'
+import AgeGate from './AgeGate.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 
 // Scrolls to top on route change so each page starts at the top.
@@ -19,6 +20,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <ScrollToTop />
+      <AgeGate />
       <AuthModal open={authModalOpen} onClose={closeAuthModal} />
       <a
         href="#main"
