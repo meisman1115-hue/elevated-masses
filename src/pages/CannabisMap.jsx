@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import * as THREE from 'three'
 import Globe from 'react-globe.gl'
 import { loadMapPolygons } from '../lib/mapData.js'
 import { STATUS, LAST_UPDATED } from '../lib/cannabisLaws.js'
@@ -29,6 +30,19 @@ export default function CannabisMap() {
   const [hovered, setHovered] = useState(null)
   const [autoRotate, setAutoRotate] = useState(!prefersReducedMotion)
   const [size, setSize] = useState({ width: 320, height: 420 })
+
+  // Elevated Masses ultraviolet purple for the globe's "water" surface —
+  // land is fully covered by the country/state/province polygon overlays.
+  const globeMaterial = useMemo(
+    () =>
+      new THREE.MeshPhongMaterial({
+        color: new THREE.Color('#5b1fa8'),
+        emissive: new THREE.Color('#3a0f75'),
+        emissiveIntensity: 0.35,
+        shininess: 12,
+      }),
+    [],
+  )
 
   useEffect(() => {
     let active = true
@@ -152,6 +166,7 @@ export default function CannabisMap() {
               width={size.width}
               height={size.height}
               backgroundColor="rgba(0,0,0,0)"
+              globeMaterial={globeMaterial}
               showAtmosphere
               atmosphereColor="#8BFF3C"
               atmosphereAltitude={0.18}
