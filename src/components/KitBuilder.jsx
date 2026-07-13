@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { ExternalLink, Wand2, Info, AlertCircle } from 'lucide-react'
 import { buildKit, MIN_BUILD, MAX_BUILD, kitCategories } from '../lib/kits.js'
-import { amazonLink } from '../lib/nav.js'
+import { affiliateHref } from '../lib/nav.js'
 
 const tierColor = {
   Starter: 'text-muted',
@@ -93,7 +93,7 @@ export default function KitBuilder() {
                 <div className="flex items-center gap-4">
                   <span className="font-display text-lg font-700 text-green">${item.price}</span>
                   <a
-                    href={amazonLink(item.url)}
+                    href={affiliateHref(item.url)}
                     target="_blank"
                     rel="nofollow sponsored noopener noreferrer"
                     className="btn-ghost !py-2 !px-4 text-xs"
@@ -107,8 +107,9 @@ export default function KitBuilder() {
 
           <p className="mt-4 flex items-start gap-2 text-xs text-muted">
             <Info size={14} className="mt-0.5 shrink-0 text-green" />
-            Prices are estimates until real Amazon products are added. Add each item to your Amazon cart —
-            purchases through these links support Elevated Masses at no extra cost to you.
+            Tents and lights are real products (prices are estimates — check Amazon for current pricing);
+            other categories are placeholders for now. Purchases through these links support Elevated Masses
+            at no extra cost to you.
           </p>
         </>
       )}

@@ -54,3 +54,10 @@ export function amazonLink(url) {
     return url
   }
 }
+
+// Use for any affiliate link. amzn.to short links already carry the tag, so
+// pass them through untouched; full amazon.com URLs get the tag appended.
+export function affiliateHref(url) {
+  if (/amzn\.to/i.test(url)) return url
+  return amazonLink(url)
+}

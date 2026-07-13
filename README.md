@@ -61,6 +61,25 @@ you can only edit or delete your own posts).
 - **Plant AI**: connect a real AI model and store submitted photos to train it.
 - **Contact / newsletter forms**: wire to email (e.g. Formspree) or Supabase.
 
+## Amazon affiliate links — automatic weekly check
+
+Amazon does not allow scraping product prices/titles, and only grants API access (the official
+Product Advertising API, for pulling live prices automatically) once an Associate has 3+
+qualifying sales in the last 180 days. Until then, [`.github/workflows/check-affiliate-links.yml`](.github/workflows/check-affiliate-links.yml)
+runs every Monday on GitHub's servers (no computer needs to be on) and:
+
+- Checks every affiliate link used on the Gear page and in the budget kit builder
+- Opens a GitHub issue (and emails you, if GitHub notifications are on) if a real link breaks
+- Ignores categories that are still placeholders (clearly listed in the report) so it doesn't
+  cry wolf over products that were never real yet
+- Closes the issue automatically once links are fixed
+
+Run it manually anytime with `npm run check-links` — it writes `link-check-report.md` locally
+(gitignored). To see past runs on GitHub: repo → **Actions** tab → "Weekly affiliate link check".
+
+Once you qualify for the Product Advertising API, this can be upgraded to pull live prices and
+titles automatically instead of just checking links — ask to have that wired in at that point.
+
 ## Design system
 
 - **Colors:** neon green `#8BFF3C` / `#A3E635`, ultraviolet purple `#A855F7` / `#C77DFF`,
@@ -71,6 +90,7 @@ you can only edit or delete your own posts).
 ## Replacing placeholders
 
 - **Images/videos:** search the code for `MediaPlaceholder` / `VideoPlaceholder` and swap in real files.
-- **Amazon products:** edit `src/pages/Gear.jsx` — set each product's real Amazon `url`; the affiliate
-  tag is added automatically.
+- **Amazon products:** edit `src/lib/gear.js` (individual products) or `src/lib/kits.js` (budget kit
+  builder categories/tiers). Full `amazon.com/...` links get the affiliate tag added automatically;
+  `amzn.to` short links already carry it.
 - **Blog posts / events / seeds:** edit the arrays at the top of the matching file in `src/pages/`.

@@ -13,18 +13,18 @@ export const kitCategories = [
     key: 'tent',
     name: 'Grow Tent',
     options: [
-      { tier: 'Starter', name: '2×2 Grow Tent', price: 70, url: 'https://www.amazon.com/dp/PLACEHOLDER-TENT-1' },
-      { tier: 'Better', name: '2×4 Grow Tent', price: 130, url: 'https://www.amazon.com/dp/PLACEHOLDER-TENT-2' },
-      { tier: 'Premium', name: '4×4 Grow Tent', price: 200, url: 'https://www.amazon.com/dp/PLACEHOLDER-TENT-3' },
+      { tier: 'Starter', name: 'Spider Farmer 2×2 Grow Tent', price: 70, url: 'https://amzn.to/4wFvM8d' },
+      { tier: 'Better', name: 'AC Infinity CLOUDLAB 844 4×4', price: 150, url: 'https://amzn.to/3RwX95p' },
+      { tier: 'Premium', name: 'AC Infinity CLOUDLAB 894 4×8', price: 280, url: 'https://amzn.to/4w1Y8K1' },
     ],
   },
   {
     key: 'light',
     name: 'LED Grow Light',
     options: [
-      { tier: 'Starter', name: '100W LED', price: 60, url: 'https://www.amazon.com/dp/PLACEHOLDER-LIGHT-1' },
-      { tier: 'Better', name: '240W LED', price: 150, url: 'https://www.amazon.com/dp/PLACEHOLDER-LIGHT-2' },
-      { tier: 'Premium', name: '480W LED', price: 320, url: 'https://www.amazon.com/dp/PLACEHOLDER-LIGHT-3' },
+      { tier: 'Starter', name: 'VIVOSUN LumaLight 100W', price: 70, url: 'https://amzn.to/4f6Empq' },
+      { tier: 'Better', name: 'VIVOSUN LumaLight 200W', price: 150, url: 'https://amzn.to/4phxtpL' },
+      { tier: 'Premium', name: 'Spider Farmer SE5000 480W', price: 330, url: 'https://amzn.to/4eU2Cw8' },
     ],
   },
   {
