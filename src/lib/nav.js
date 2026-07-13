@@ -9,6 +9,7 @@ export const navGroups = [
       { label: 'Tutorials', to: '/tutorials', desc: 'Companion planting & more' },
       { label: 'Recipes', to: '/recipes', desc: 'Infused & fresh-grown' },
       { label: 'Plant AI', to: '/plant-ai', desc: 'Diagnose a plant problem' },
+      { label: 'Legal Map', to: '/legal-map', desc: 'Cannabis laws by region' },
     ],
   },
   {

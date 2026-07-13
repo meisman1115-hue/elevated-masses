@@ -1,4 +1,6 @@
+import { Suspense, lazy } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import Blog from './pages/Blog.jsx'
@@ -20,6 +22,17 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import NotFound from './pages/NotFound.jsx'
 
+// Lazy-loaded: react-globe.gl bundles three.js and is only needed on this page.
+const CannabisMap = lazy(() => import('./pages/CannabisMap.jsx'))
+
+function MapFallback() {
+  return (
+    <div className="container-em flex min-h-[60vh] items-center justify-center gap-2 text-muted">
+      <Loader2 className="animate-spin" size={20} /> Loading the map…
+    </div>
+  )
+}
+
 export default function App() {
   return (
     <Layout>
@@ -40,6 +53,14 @@ export default function App() {
         <Route path="/membership" element={<Membership />} />
         <Route path="/downloads" element={<Downloads />} />
         <Route path="/plant-ai" element={<PlantAI />} />
+        <Route
+          path="/legal-map"
+          element={
+            <Suspense fallback={<MapFallback />}>
+              <CannabisMap />
+            </Suspense>
+          }
+        />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
