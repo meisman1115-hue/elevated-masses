@@ -4,9 +4,24 @@
 // returns structured JSON. Requires ANTHROPIC_API_KEY as a Vercel
 // environment variable (server-side only — no VITE_ prefix, so it never
 // reaches the browser bundle).
+//
+// Requires the caller to be signed in (Authorization: Bearer <supabase
+// access token>) so weekly usage can be tracked and capped per person.
+// Reuses VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY — those are already set
+// in Vercel for the frontend; Vercel exposes them to serverless functions
+// too regardless of the VITE_ prefix (that prefix only controls what Vite
+// inlines into the browser bundle).
 import Anthropic from '@anthropic-ai/sdk'
+import { createClient } from '@supabase/supabase-js'
 
 const anthropic = new Anthropic() // reads ANTHROPIC_API_KEY from the environment
+
+// Weekly diagnosis limits by membership tier. Tiers are set manually for now
+// (Supabase Dashboard > profiles > membership_tier) — see
+// supabase/schema-plant-ai-limits.sql for the full setup and how tiers map
+// to Patreon pledge amounts.
+const TIER_LIMITS = { free: 10, supporter: 100, patron: Infinity }
+const TIER_LABELS = { free: 'Free', supporter: 'Supporter', patron: 'Patron' }
 
 const DIAGNOSIS_SCHEMA = {
   type: 'object',
@@ -38,6 +53,14 @@ Focus on the most common causes in hydroponic/indoor growing: nutrient deficienc
 const ALLOWED_MEDIA_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
 const MAX_BASE64_CHARS = 8_000_000 // ~6MB decoded, comfortably under Vercel's request body limit
 
+// Most recent Sunday (UTC) as a YYYY-MM-DD string — the "week bucket" key.
+function currentWeekStartUTC() {
+  const now = new Date()
+  const utcMidnight = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+  utcMidnight.setUTCDate(utcMidnight.getUTCDate() - utcMidnight.getUTCDay()) // getUTCDay: 0 = Sunday
+  return utcMidnight.toISOString().slice(0, 10)
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
@@ -47,6 +70,60 @@ export default async function handler(req, res) {
   if (!process.env.ANTHROPIC_API_KEY) {
     res.status(500).json({ error: 'Plant AI is not configured yet — missing API key.' })
     return
+  }
+
+  const supabaseUrl = process.env.VITE_SUPABASE_URL
+  const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY
+  if (!supabaseUrl || !supabaseAnonKey) {
+    res.status(500).json({ error: 'Plant AI is not configured yet — missing Supabase config.' })
+    return
+  }
+
+  const authHeader = req.headers.authorization || ''
+  const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+  if (!accessToken) {
+    res.status(401).json({ error: 'Please sign in to use Plant AI.' })
+    return
+  }
+
+  // Scoped to the caller's own session — RLS enforces they only ever touch
+  // their own profile/usage rows.
+  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: authHeader } },
+  })
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(accessToken)
+  if (userError || !userData?.user) {
+    res.status(401).json({ error: 'Your session has expired — please sign in again.' })
+    return
+  }
+  const userId = userData.user.id
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('membership_tier')
+    .eq('id', userId)
+    .single()
+  const tier = profile?.membership_tier in TIER_LIMITS ? profile.membership_tier : 'free'
+  const limit = TIER_LIMITS[tier]
+
+  const weekStart = currentWeekStartUTC()
+
+  if (limit !== Infinity) {
+    const { data: usageRow } = await supabase
+      .from('plant_ai_usage')
+      .select('count')
+      .eq('user_id', userId)
+      .eq('week_start', weekStart)
+      .maybeSingle()
+    const used = usageRow?.count ?? 0
+    if (used >= limit) {
+      res.status(429).json({
+        error: `You've used all ${limit} of your weekly Plant AI diagnoses (${TIER_LABELS[tier]} tier). Resets Sunday at midnight UTC.`,
+        usage: { tier, used, limit },
+      })
+      return
+    }
   }
 
   const { imageBase64, imageMediaType, plantType, symptoms } = req.body || {}
@@ -99,7 +176,17 @@ export default async function handler(req, res) {
     }
 
     const diagnosis = JSON.parse(textBlock.text)
-    res.status(200).json({ diagnosis })
+
+    // Only counts against the weekly limit once the diagnosis actually
+    // succeeds — failed attempts (bad image, refusal, network error) don't
+    // cost the user a use.
+    let used = null
+    if (limit !== Infinity) {
+      const { data: newCount } = await supabase.rpc('increment_plant_ai_usage', { p_week_start: weekStart })
+      used = newCount ?? null
+    }
+
+    res.status(200).json({ diagnosis, usage: { tier, used, limit: limit === Infinity ? null : limit } })
   } catch (err) {
     console.error('diagnose error:', err)
     res.status(500).json({ error: 'Could not analyze the photo right now. Please try again in a moment.' })

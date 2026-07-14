@@ -2,13 +2,15 @@ import { useState, useRef, useEffect } from 'react'
 import { PageHeader, StubNote } from '../components/ui.jsx'
 import {
   Upload, ScanLine, Leaf, AlertTriangle, CheckCircle2,
-  Sparkles, Database, ShieldCheck, Loader2, X, AlertCircle,
+  Sparkles, Database, ShieldCheck, Loader2, X, AlertCircle, Gauge,
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 const plantTypes = ['Cannabis', 'Leafy greens', 'Herbs', 'Tomatoes / fruiting', 'Peppers', 'Other']
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_FILE_MB = 15
+const TIER_LABELS = { free: 'Free', supporter: 'Supporter', patron: 'Patron' }
 
 // Resizes/compresses an image client-side before sending it anywhere — keeps
 // the request small and image tokens cheap. Returns a JPEG blob + its base64
@@ -53,7 +55,7 @@ function resizeImage(file, maxDim = 1024, quality = 0.85) {
 
 // Best-effort: save the submission for the grower-sourced training dataset.
 // Never blocks or breaks the diagnosis flow if it fails.
-async function saveSubmission({ blob, plantType, symptoms, diagnosis }) {
+async function saveSubmission({ blob, plantType, symptoms, diagnosis, userId }) {
   if (!isSupabaseConfigured) return
   const path = `${crypto.randomUUID()}.jpg`
   const { error: uploadError } = await supabase.storage.from('plant-photos').upload(path, blob, {
@@ -61,9 +63,8 @@ async function saveSubmission({ blob, plantType, symptoms, diagnosis }) {
   })
   if (uploadError) throw uploadError
   const { data: urlData } = supabase.storage.from('plant-photos').getPublicUrl(path)
-  const { data: userData } = await supabase.auth.getUser()
   await supabase.from('plant_submissions').insert({
-    author_id: userData?.user?.id ?? null,
+    author_id: userId ?? null,
     plant_type: plantType,
     symptoms,
     image_url: urlData?.publicUrl,
@@ -72,17 +73,25 @@ async function saveSubmission({ blob, plantType, symptoms, diagnosis }) {
 }
 
 export default function PlantAI() {
+  const { user, isConfigured, openAuthModal } = useAuth()
   const [status, setStatus] = useState('idle') // idle | analyzing | done | error
   const [plant, setPlant] = useState('Cannabis')
   const [symptoms, setSymptoms] = useState('')
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState(null)
   const [diagnosis, setDiagnosis] = useState(null)
+  const [usage, setUsage] = useState(null) // { tier, used, limit }
   const [errorMsg, setErrorMsg] = useState('')
   const fileInputRef = useRef(null)
 
   // Revoke the object URL when the preview changes or the component unmounts.
   useEffect(() => () => previewUrl && URL.revokeObjectURL(previewUrl), [previewUrl])
+
+  // Prompt sign-in if not authenticated — Plant AI requires an account so
+  // weekly usage can be tracked per person.
+  useEffect(() => {
+    if (isConfigured && !user) openAuthModal()
+  }, [isConfigured, user, openAuthModal])
 
   function handleFileSelect(selected) {
     setErrorMsg('')
@@ -117,23 +126,38 @@ export default function PlantAI() {
       setErrorMsg('Please choose a photo of your plant first.')
       return
     }
+    if (!user) {
+      openAuthModal()
+      return
+    }
     setStatus('analyzing')
     setErrorMsg('')
     try {
       const { blob, base64, mediaType } = await resizeImage(file)
+      const { data: sessionData } = await supabase.auth.getSession()
+      const accessToken = sessionData?.session?.access_token
+      if (!accessToken) throw new Error('Your session has expired — please sign in again.')
+
       const res = await fetch('/api/diagnose', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({ imageBase64: base64, imageMediaType: mediaType, plantType: plant, symptoms }),
       })
       const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data.error || 'Something went wrong analyzing that photo.')
+      if (!res.ok) {
+        if (data.usage) setUsage(data.usage)
+        throw new Error(data.error || 'Something went wrong analyzing that photo.')
+      }
 
       setDiagnosis(data.diagnosis)
+      if (data.usage) setUsage(data.usage)
       setStatus('done')
 
       // Fire-and-forget — helps build the dataset, never blocks the result.
-      saveSubmission({ blob, plantType: plant, symptoms, diagnosis: data.diagnosis }).catch(() => {})
+      saveSubmission({ blob, plantType: plant, symptoms, diagnosis: data.diagnosis, userId: user.id }).catch(() => {})
     } catch (err) {
       setErrorMsg(err.message || 'Could not analyze the photo. Please try again.')
       setStatus('error')
@@ -141,6 +165,22 @@ export default function PlantAI() {
   }
 
   const confidenceLabel = { low: 'Low confidence', medium: 'Medium confidence', high: 'High confidence' }
+
+  // Gate the whole page behind sign-in.
+  if (isConfigured && !user) {
+    return (
+      <div className="container-em max-w-2xl py-24 text-center">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple/10 text-purple-soft">
+          <ScanLine size={28} />
+        </span>
+        <h1 className="mt-5 text-2xl font-700 text-fg">Sign in to use Plant AI</h1>
+        <p className="mt-3 text-muted">
+          A free account keeps diagnoses tied to you and lets us give everyone a fair weekly limit.
+        </p>
+        <button type="button" onClick={openAuthModal} className="btn-primary mt-6">Sign in</button>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -156,7 +196,21 @@ export default function PlantAI() {
           but not a substitute for experience. Always keep monitoring your plant.
         </StubNote>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+        {usage && (
+          <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-white/10 bg-surface/50 px-4 py-3 text-sm text-muted">
+            <Gauge size={16} className="text-green" />
+            {usage.limit == null ? (
+              <span><span className="font-600 text-fg">{TIER_LABELS[usage.tier] ?? usage.tier}</span> — unlimited diagnoses</span>
+            ) : (
+              <span>
+                <span className="font-600 text-fg">{usage.used} of {usage.limit}</span> diagnoses used this week
+                ({TIER_LABELS[usage.tier] ?? usage.tier} tier) — resets Sunday at midnight UTC
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1.2fr_1fr]">
           {/* Submission form */}
           <form onSubmit={handleSubmit} className="card p-6 sm:p-8">
             <h2 className="text-xl font-700 text-fg">Submit your plant</h2>
@@ -292,10 +346,17 @@ export default function PlantAI() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 flex items-start gap-2 border-t border-white/10 pt-4 text-xs text-muted">
-                <ShieldCheck size={15} className="mt-0.5 shrink-0 text-green" />
-                Photos help train future diagnoses and aren't shown publicly.
-              </p>
+              <div className="mt-5 space-y-2 border-t border-white/10 pt-4 text-xs text-muted">
+                <p className="flex items-start gap-2">
+                  <ShieldCheck size={15} className="mt-0.5 shrink-0 text-green" />
+                  Photos help train future diagnoses and aren't shown publicly.
+                </p>
+                <p className="flex items-start gap-2">
+                  <Gauge size={15} className="mt-0.5 shrink-0 text-green" />
+                  Free accounts get 10 diagnoses/week. Patreon supporters ($20+) get 100/week, and $100+ patrons
+                  get unlimited — see <a href="/membership" className="text-green hover:text-green-soft">Membership</a>.
+                </p>
+              </div>
             </div>
           </div>
         </div>
