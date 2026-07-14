@@ -1,8 +1,15 @@
 import { PageHeader, MediaPlaceholder, StubNote } from '../components/ui.jsx'
-import { ExternalLink, Info, Leaf, Sun, Timer } from 'lucide-react'
+import { ExternalLink, Info, Leaf, Sun, Timer, Tag } from 'lucide-react'
 
 const companies = [
-  { name: 'Seed Company One', blurb: 'Feminized & autoflower genetics. Placeholder — partnership pending.', tags: ['Autoflower', 'Feminized'] },
+  {
+    name: 'FastBuds',
+    blurb: 'Autoflower specialists known for fast, resilient genetics that finish quick without sacrificing yield — a solid pick for indoor and hydro growers.',
+    tags: ['Autoflower', 'Feminized'],
+    url: 'https://2fast4buds.com/us',
+    promoCode: 'UROWN',
+    promoText: '15% off your order',
+  },
   { name: 'Seed Company Two', blurb: 'Heirloom vegetable & herb seeds for hydro. Placeholder — partnership pending.', tags: ['Heirloom', 'Herbs'] },
   { name: 'Seed Company Three', blurb: 'High-yield hydroponic strains. Placeholder — partnership pending.', tags: ['High-yield', 'Indoor'] },
 ]
@@ -34,8 +41,8 @@ export default function Seeds() {
         </div>
 
         <StubNote>
-          Seed partnerships are in progress. These are placeholders — company names, logos and links
-          drop in here as affiliate inquiries come back.
+          FastBuds is our first live seed partner — more companies drop in here as affiliate inquiries
+          come back.
         </StubNote>
 
         {/* Companies */}
@@ -51,9 +58,30 @@ export default function Seeds() {
               </div>
               <h3 className="mt-3 text-lg font-600 text-fg">{c.name}</h3>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{c.blurb}</p>
-              <button type="button" className="btn-ghost mt-5 w-full" disabled>
-                Link coming soon <ExternalLink size={15} />
-              </button>
+
+              {c.promoCode && (
+                <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-green/30 bg-green/5 px-4 py-3">
+                  <span className="flex items-center gap-2 text-sm text-fg">
+                    <Tag size={15} className="text-green" /> {c.promoText}
+                  </span>
+                  <span className="rounded-full bg-green px-3 py-1 font-mono text-xs font-700 text-bg">{c.promoCode}</span>
+                </div>
+              )}
+
+              {c.url ? (
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="nofollow sponsored noopener noreferrer"
+                  className="btn-primary mt-5 w-full"
+                >
+                  Shop {c.name} <ExternalLink size={15} />
+                </a>
+              ) : (
+                <button type="button" className="btn-ghost mt-5 w-full" disabled>
+                  Link coming soon <ExternalLink size={15} />
+                </button>
+              )}
             </div>
           ))}
         </div>
