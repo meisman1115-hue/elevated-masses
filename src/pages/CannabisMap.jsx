@@ -23,6 +23,7 @@ export default function CannabisMap() {
   const globeRef = useRef()
   const containerRef = useRef()
   const resumeTimer = useRef(null)
+  const lastHoverUpdate = useRef(0)
 
   const [polygons, setPolygons] = useState([])
   const [loadState, setLoadState] = useState('loading') // loading | ready | error
@@ -85,6 +86,30 @@ export default function CannabisMap() {
     }
     globeRef.current?.pointOfView({ lat: 25, lng: -40, altitude: 2.3 }, 0)
   }
+
+  // Memoized so these only get new identities when `hovered` actually
+  // changes (now throttled above), instead of on every unrelated re-render.
+  const getCapColor = useCallback((d) => capColor(d, d === hovered), [hovered])
+  const getAltitude = useCallback((d) => (d === hovered ? 0.05 : 0.01), [hovered])
+  const getSideColor = useCallback(() => 'rgba(15,17,20,0.35)', [])
+  const getLabel = useCallback(
+    (d) =>
+      `<div style="font-family:Inter,sans-serif;padding:5px 10px;background:#10131A;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#EAF3E4;font-size:12px;">${d.properties.name}</div>`,
+    [],
+  )
+
+  // Throttled hover handler. While auto-rotating with the cursor held still,
+  // the raycaster hits a *different* polygon on nearly every animation frame
+  // — without a limit, that fires a React state update (and brand-new
+  // accessor closures below) up to ~60x/sec, which overwhelms the polygon
+  // layer over an extended hover and can corrupt the render. Capping updates
+  // to a few per second keeps the highlight responsive but sane.
+  const handlePolygonHover = useCallback((d) => {
+    const now = performance.now()
+    if (now - lastHoverUpdate.current < 120) return
+    lastHoverUpdate.current = now
+    setHovered(d)
+  }, [])
 
   // Pause auto-rotate while the user is actively dragging/zooming, then
   // resume after a few seconds of inactivity — keeps it feeling alive
@@ -173,14 +198,13 @@ export default function CannabisMap() {
               showGraticules
               polygonsData={polygons}
               polygonGeoJsonGeometry="geometry"
-              polygonCapColor={(d) => capColor(d, d === hovered)}
-              polygonSideColor={() => 'rgba(15,17,20,0.35)'}
+              polygonCapColor={getCapColor}
+              polygonSideColor={getSideColor}
               polygonStrokeColor={strokeColor}
-              polygonAltitude={(d) => (d === hovered ? 0.05 : 0.01)}
-              polygonLabel={(d) =>
-                `<div style="font-family:Inter,sans-serif;padding:5px 10px;background:#10131A;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#EAF3E4;font-size:12px;">${d.properties.name}</div>`
-              }
-              onPolygonHover={setHovered}
+              polygonAltitude={getAltitude}
+              polygonLabel={getLabel}
+              polygonsTransitionDuration={200}
+              onPolygonHover={handlePolygonHover}
               onPolygonClick={setSelected}
               onGlobeReady={handleGlobeReady}
             />
