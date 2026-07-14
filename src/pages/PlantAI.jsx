@@ -1,36 +1,146 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { PageHeader, StubNote } from '../components/ui.jsx'
 import {
   Upload, ScanLine, Leaf, AlertTriangle, CheckCircle2,
-  Sparkles, Database, ShieldCheck, Loader2,
+  Sparkles, Database, ShieldCheck, Loader2, X, AlertCircle,
 } from 'lucide-react'
+import { supabase, isSupabaseConfigured } from '../lib/supabase.js'
 
 const plantTypes = ['Cannabis', 'Leafy greens', 'Herbs', 'Tomatoes / fruiting', 'Peppers', 'Other']
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_FILE_MB = 15
 
-// Demo diagnosis shown after "analyzing" — replaced by a real AI model later.
-const demoResult = {
-  issue: 'Likely nitrogen deficiency',
-  confidence: 'Demo result',
-  causes: [
-    'Older/lower leaves yellowing from the tips inward',
-    'Reservoir may be low on nitrogen or pH is out of range (nutrient lockout)',
-  ],
-  fixes: [
-    'Check and correct pH to 5.5–6.5 for hydro',
-    'Top up with a balanced nutrient / cal-mag per label',
-    'Recheck new growth over the next 5–7 days',
-  ],
+// Resizes/compresses an image client-side before sending it anywhere — keeps
+// the request small and image tokens cheap. Returns a JPEG blob + its base64
+// data (for the API call) at a max of 1024px on the long edge.
+function resizeImage(file, maxDim = 1024, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      let { width, height } = img
+      if (width > height && width > maxDim) {
+        height = Math.round((height * maxDim) / width)
+        width = maxDim
+      } else if (height > maxDim) {
+        width = Math.round((width * maxDim) / height)
+        height = maxDim
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height)
+      canvas.toBlob(
+        (blob) => {
+          URL.revokeObjectURL(objectUrl)
+          if (!blob) return reject(new Error('Could not process that image.'))
+          const reader = new FileReader()
+          reader.onload = () => resolve({ blob, base64: reader.result.split(',')[1], mediaType: 'image/jpeg' })
+          reader.onerror = () => reject(new Error('Could not read that image.'))
+          reader.readAsDataURL(blob)
+        },
+        'image/jpeg',
+        quality,
+      )
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error('Could not load that image.'))
+    }
+    img.src = objectUrl
+  })
+}
+
+// Best-effort: save the submission for the grower-sourced training dataset.
+// Never blocks or breaks the diagnosis flow if it fails.
+async function saveSubmission({ blob, plantType, symptoms, diagnosis }) {
+  if (!isSupabaseConfigured) return
+  const path = `${crypto.randomUUID()}.jpg`
+  const { error: uploadError } = await supabase.storage.from('plant-photos').upload(path, blob, {
+    contentType: 'image/jpeg',
+  })
+  if (uploadError) throw uploadError
+  const { data: urlData } = supabase.storage.from('plant-photos').getPublicUrl(path)
+  const { data: userData } = await supabase.auth.getUser()
+  await supabase.from('plant_submissions').insert({
+    author_id: userData?.user?.id ?? null,
+    plant_type: plantType,
+    symptoms,
+    image_url: urlData?.publicUrl,
+    diagnosis,
+  })
 }
 
 export default function PlantAI() {
-  const [status, setStatus] = useState('idle') // idle | loading | done
+  const [status, setStatus] = useState('idle') // idle | analyzing | done | error
   const [plant, setPlant] = useState('Cannabis')
+  const [symptoms, setSymptoms] = useState('')
+  const [file, setFile] = useState(null)
+  const [previewUrl, setPreviewUrl] = useState(null)
+  const [diagnosis, setDiagnosis] = useState(null)
+  const [errorMsg, setErrorMsg] = useState('')
+  const fileInputRef = useRef(null)
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    setStatus('loading')
-    setTimeout(() => setStatus('done'), 1600) // simulate analysis
+  // Revoke the object URL when the preview changes or the component unmounts.
+  useEffect(() => () => previewUrl && URL.revokeObjectURL(previewUrl), [previewUrl])
+
+  function handleFileSelect(selected) {
+    setErrorMsg('')
+    if (!selected) return
+    if (!ACCEPTED_TYPES.includes(selected.type)) {
+      setErrorMsg('Please choose a JPG, PNG, or WebP photo.')
+      return
+    }
+    if (selected.size > MAX_FILE_MB * 1024 * 1024) {
+      setErrorMsg(`That photo is too large — please choose one under ${MAX_FILE_MB}MB.`)
+      return
+    }
+    setFile(selected)
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return URL.createObjectURL(selected)
+    })
   }
+
+  function clearFile() {
+    setFile(null)
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return null
+    })
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!file) {
+      setErrorMsg('Please choose a photo of your plant first.')
+      return
+    }
+    setStatus('analyzing')
+    setErrorMsg('')
+    try {
+      const { blob, base64, mediaType } = await resizeImage(file)
+      const res = await fetch('/api/diagnose', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: base64, imageMediaType: mediaType, plantType: plant, symptoms }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error || 'Something went wrong analyzing that photo.')
+
+      setDiagnosis(data.diagnosis)
+      setStatus('done')
+
+      // Fire-and-forget — helps build the dataset, never blocks the result.
+      saveSubmission({ blob, plantType: plant, symptoms, diagnosis: data.diagnosis }).catch(() => {})
+    } catch (err) {
+      setErrorMsg(err.message || 'Could not analyze the photo. Please try again.')
+      setStatus('error')
+    }
+  }
+
+  const confidenceLabel = { low: 'Low confidence', medium: 'Medium confidence', high: 'High confidence' }
 
   return (
     <>
@@ -42,8 +152,8 @@ export default function PlantAI() {
 
       <div className="container-em py-12">
         <StubNote>
-          This is a working demo of the interface. It returns a sample diagnosis for now — connecting a
-          real AI model (and safely storing submissions to train it) is the next build step.
+          Diagnoses are generated by AI from your photo and description — genuinely useful as a first read,
+          but not a substitute for experience. Always keep monitoring your plant.
         </StubNote>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_1fr]">
@@ -54,11 +164,36 @@ export default function PlantAI() {
             {/* Upload */}
             <div className="mt-6">
               <label className="mb-2 block text-sm font-600 text-fg">Photo of the plant</label>
-              <div className="flex aspect-[16/10] w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-white/15 bg-surface/50 text-muted transition-colors hover:border-green/50">
-                <Upload size={28} className="text-green" />
-                <p className="text-sm font-medium">Drag a photo here or click to upload</p>
-                <p className="text-xs text-muted/70">JPG or PNG · placeholder — not yet functional</p>
-              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={ACCEPTED_TYPES.join(',')}
+                onChange={(e) => handleFileSelect(e.target.files?.[0])}
+                className="sr-only"
+                id="plant-photo"
+              />
+              {previewUrl ? (
+                <div className="relative overflow-hidden rounded-2xl border border-white/15">
+                  <img src={previewUrl} alt="Selected plant" className="aspect-[16/10] w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={clearFile}
+                    className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-bg/80 text-fg backdrop-blur hover:bg-bg"
+                    aria-label="Remove photo"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <label
+                  htmlFor="plant-photo"
+                  className="flex aspect-[16/10] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-white/15 bg-surface/50 text-muted transition-colors hover:border-green/50"
+                >
+                  <Upload size={28} className="text-green" />
+                  <p className="text-sm font-medium">Click to choose a photo</p>
+                  <p className="text-xs text-muted/70">JPG, PNG, or WebP · up to {MAX_FILE_MB}MB</p>
+                </label>
+              )}
             </div>
 
             {/* Plant type */}
@@ -80,14 +215,22 @@ export default function PlantAI() {
               <textarea
                 id="symptoms"
                 rows={4}
+                value={symptoms}
+                onChange={(e) => setSymptoms(e.target.value)}
                 placeholder="e.g. Lower leaves are turning yellow and curling. Growing in DWC, pH around 6.2…"
                 className="w-full rounded-xl border border-white/10 bg-surface px-4 py-3 text-sm text-fg placeholder:text-muted/50 focus:border-green/60 focus:outline-none"
               />
               <p className="mt-1.5 text-xs text-muted">The more detail (setup, water, light, timeline), the better the guess.</p>
             </div>
 
-            <button type="submit" className="btn-primary mt-6 w-full" disabled={status === 'loading'}>
-              {status === 'loading' ? (
+            {errorMsg && (
+              <p role="alert" className="mt-4 flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                <AlertCircle size={15} className="mt-0.5 shrink-0" /> {errorMsg}
+              </p>
+            )}
+
+            <button type="submit" className="btn-primary mt-6 w-full" disabled={status === 'analyzing'}>
+              {status === 'analyzing' ? (
                 <><Loader2 size={16} className="animate-spin" /> Analyzing…</>
               ) : (
                 <><ScanLine size={16} /> Analyze plant</>
@@ -97,31 +240,31 @@ export default function PlantAI() {
 
           {/* Result / info panel */}
           <div className="space-y-6">
-            {status === 'done' ? (
+            {status === 'done' && diagnosis ? (
               <div className="card p-6 sm:p-7 animate-fade-up">
                 <div className="flex items-center gap-2">
-                  <span className="chip"><Sparkles size={13} className="text-purple-soft" /> {demoResult.confidence}</span>
+                  <span className="chip"><Sparkles size={13} className="text-purple-soft" /> {confidenceLabel[diagnosis.confidence] ?? 'AI diagnosis'}</span>
                 </div>
                 <h3 className="mt-4 flex items-center gap-2 text-xl font-700 text-fg">
-                  <AlertTriangle size={20} className="text-purple-soft" /> {demoResult.issue}
+                  <AlertTriangle size={20} className="text-purple-soft" /> {diagnosis.issue}
                 </h3>
 
                 <h4 className="mt-5 text-sm font-600 uppercase tracking-wide text-muted">What we're seeing</h4>
                 <ul className="mt-2 space-y-2">
-                  {demoResult.causes.map((c) => (
+                  {diagnosis.causes.map((c) => (
                     <li key={c} className="flex gap-2 text-sm text-muted"><Leaf size={15} className="mt-0.5 shrink-0 text-green" /> {c}</li>
                   ))}
                 </ul>
 
                 <h4 className="mt-5 text-sm font-600 uppercase tracking-wide text-muted">Suggested fixes</h4>
                 <ul className="mt-2 space-y-2">
-                  {demoResult.fixes.map((f) => (
+                  {diagnosis.fixes.map((f) => (
                     <li key={f} className="flex gap-2 text-sm text-muted"><CheckCircle2 size={15} className="mt-0.5 shrink-0 text-green" /> {f}</li>
                   ))}
                 </ul>
 
                 <p className="mt-5 rounded-lg bg-white/5 px-3 py-2 text-xs text-muted/80">
-                  Demo output for layout purposes only — not real plant-health advice yet.
+                  AI-generated guidance, not a certain diagnosis — keep monitoring and change one variable at a time.
                 </p>
               </div>
             ) : (
@@ -130,7 +273,7 @@ export default function PlantAI() {
                   <ScanLine size={30} />
                 </span>
                 <h3 className="mt-4 text-lg font-600 text-fg">Your diagnosis appears here</h3>
-                <p className="mt-2 max-w-xs text-sm text-muted">Fill out the form and hit Analyze to see a sample result.</p>
+                <p className="mt-2 max-w-xs text-sm text-muted">Upload a photo and hit Analyze to get a real-time diagnosis.</p>
               </div>
             )}
 
@@ -151,7 +294,7 @@ export default function PlantAI() {
               </ul>
               <p className="mt-5 flex items-start gap-2 border-t border-white/10 pt-4 text-xs text-muted">
                 <ShieldCheck size={15} className="mt-0.5 shrink-0 text-green" />
-                Your submissions stay private and are only used to improve diagnoses. You'll control this when accounts launch.
+                Photos help train future diagnoses and aren't shown publicly.
               </p>
             </div>
           </div>
