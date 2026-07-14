@@ -4,6 +4,7 @@ import { ExternalLink, Info, Leaf, Sun, Timer, Tag } from 'lucide-react'
 const companies = [
   {
     name: 'FastBuds',
+    logo: '/logos/fastbuds.svg',
     blurb: 'Autoflower specialists known for fast, resilient genetics that finish quick without sacrificing yield — a solid pick for indoor and hydro growers.',
     tags: ['Autoflower', 'Feminized'],
     url: 'https://2fast4buds.com/us',
@@ -50,7 +51,13 @@ export default function Seeds() {
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {companies.map((c) => (
             <div key={c.name} className="card-hover flex flex-col p-6">
-              <MediaPlaceholder ratio="aspect-[16/9]" label="Company logo" className="mb-5" />
+              {c.logo ? (
+                <div className="mb-5 flex aspect-[16/9] w-full items-center justify-center rounded-2xl border border-white/10 bg-surface2 p-8">
+                  <img src={c.logo} alt={`${c.name} logo`} className="max-h-full max-w-full object-contain" />
+                </div>
+              ) : (
+                <MediaPlaceholder ratio="aspect-[16/9]" label="Company logo" className="mb-5" />
+              )}
               <div className="flex flex-wrap gap-2">
                 {c.tags.map((t) => (
                   <span key={t} className="chip"><Leaf size={12} className="text-green" /> {t}</span>
