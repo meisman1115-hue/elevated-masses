@@ -31,9 +31,9 @@ export const kitCategories = [
     key: 'air',
     name: 'Ventilation (fan + filter)',
     options: [
-      { tier: 'Starter', name: '4" Inline Fan + Carbon Filter', price: 45, url: 'https://www.amazon.com/dp/PLACEHOLDER-VENT-1' },
-      { tier: 'Better', name: '6" Fan + Filter + Controller', price: 90, url: 'https://www.amazon.com/dp/PLACEHOLDER-VENT-2' },
-      { tier: 'Premium', name: '6" Smart Fan + Filter Kit', price: 150, url: 'https://www.amazon.com/dp/PLACEHOLDER-VENT-3' },
+      { tier: 'Starter', name: 'VIVOSUN Air Filtration G4 Kit 4"', price: 55, url: 'https://amzn.to/3RwE03C' },
+      { tier: 'Better', name: 'VIVOSUN Air Filtration G6 Kit 6"', price: 90, url: 'https://amzn.to/4w41zzS' },
+      { tier: 'Premium', name: 'AC Infinity Air Filtration PRO Kit 8" (Smart Controller)', price: 220, url: 'https://amzn.to/4yhDpmO' },
     ],
   },
   {
@@ -49,18 +49,18 @@ export const kitCategories = [
     key: 'nutrients',
     name: 'Nutrients',
     options: [
-      { tier: 'Starter', name: 'Base Nutrient Set', price: 25, url: 'https://www.amazon.com/dp/PLACEHOLDER-NUTE-1' },
-      { tier: 'Better', name: 'Full Feeding Kit', price: 55, url: 'https://www.amazon.com/dp/PLACEHOLDER-NUTE-2' },
-      { tier: 'Premium', name: 'Complete Nutrient System', price: 95, url: 'https://www.amazon.com/dp/PLACEHOLDER-NUTE-3' },
+      { tier: 'Starter', name: 'General Hydroponics FloraSeries Trial Pack', price: 20, url: 'https://amzn.to/4bmoApg' },
+      { tier: 'Better', name: 'FoxFarm Hydro Liquid Trio Pack (Quart)', price: 45, url: 'https://amzn.to/4f4V6x6' },
+      { tier: 'Premium', name: 'Athena Blended Grow & Bloom A&B', price: 90, url: 'https://amzn.to/4vWrrgU' },
     ],
   },
   {
     key: 'meters',
     name: 'pH / EC Meters + Control',
     options: [
-      { tier: 'Starter', name: 'pH/EC Pens + pH Up/Down', price: 25, url: 'https://www.amazon.com/dp/PLACEHOLDER-METER-1' },
-      { tier: 'Better', name: 'Digital Combo Meter Kit', price: 60, url: 'https://www.amazon.com/dp/PLACEHOLDER-METER-2' },
-      { tier: 'Premium', name: 'Continuous Monitor Kit', price: 110, url: 'https://www.amazon.com/dp/PLACEHOLDER-METER-3' },
+      { tier: 'Starter', name: '4-in-1 Digital pH/TDS/EC Meter', price: 20, url: 'https://amzn.to/3R7p9ws' },
+      { tier: 'Better', name: 'Bluelab pH Pen', price: 75, url: 'https://amzn.to/4wLZ4lL' },
+      { tier: 'Premium', name: 'Bluelab Combo Meter (pH/Temp/EC)', price: 200, url: 'https://amzn.to/4vrISoq' },
     ],
   },
   {
@@ -78,7 +78,7 @@ export const kitCategories = [
     options: [
       { tier: 'Starter', name: 'Timer + Thermo-Hygrometer', price: 20, url: 'https://www.amazon.com/dp/PLACEHOLDER-ENV-1' },
       { tier: 'Better', name: 'Digital Timer + Sensor Set', price: 35, url: 'https://www.amazon.com/dp/PLACEHOLDER-ENV-2' },
-      { tier: 'Premium', name: 'Smart Controller + Sensors', price: 60, url: 'https://www.amazon.com/dp/PLACEHOLDER-ENV-3' },
+      { tier: 'Premium', name: 'AC Infinity TERRAFORM 8 (AC/Heat/Dehumidifier, 12000 BTU)', price: 549, url: 'https://amzn.to/3T2t3Ho' },
     ],
   },
 ]

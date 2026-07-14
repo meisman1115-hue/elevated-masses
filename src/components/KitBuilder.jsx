@@ -107,9 +107,9 @@ export default function KitBuilder() {
 
           <p className="mt-4 flex items-start gap-2 text-xs text-muted">
             <Info size={14} className="mt-0.5 shrink-0 text-green" />
-            Tents and lights are real products (prices are estimates — check Amazon for current pricing);
-            other categories are placeholders for now. Purchases through these links support Elevated Masses
-            at no extra cost to you.
+            Tents, lights, ventilation, nutrients, meters, and the Premium climate-control option are real
+            products (prices are estimates — check Amazon for current pricing). Grow System and Air Pump are
+            still placeholders. Purchases through these links support Elevated Masses at no extra cost to you.
           </p>
         </>
       )}
