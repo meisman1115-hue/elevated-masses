@@ -18,10 +18,10 @@ const anthropic = new Anthropic() // reads ANTHROPIC_API_KEY from the environmen
 
 // Weekly diagnosis limits by membership tier. Tiers are set manually for now
 // (Supabase Dashboard > profiles > membership_tier) — see
-// supabase/schema-plant-ai-limits.sql for the full setup and how tiers map
+// supabase/schema-plant-ai-tiers-v2.sql for the full setup and how tiers map
 // to Patreon pledge amounts.
-const TIER_LIMITS = { free: 10, supporter: 100, patron: Infinity }
-const TIER_LABELS = { free: 'Free', supporter: 'Supporter', patron: 'Patron' }
+const TIER_LIMITS = { free: 10, seedling: 25, vegging: 100, flowering: 100, harvest: Infinity }
+const TIER_LABELS = { free: 'Free', seedling: 'Seedling', vegging: 'Vegging', flowering: 'Flowering', harvest: 'Harvest' }
 
 const DIAGNOSIS_SCHEMA = {
   type: 'object',

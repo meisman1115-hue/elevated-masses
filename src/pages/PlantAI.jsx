@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 const plantTypes = ['Cannabis', 'Leafy greens', 'Herbs', 'Tomatoes / fruiting', 'Peppers', 'Other']
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_FILE_MB = 15
-const TIER_LABELS = { free: 'Free', supporter: 'Supporter', patron: 'Patron' }
+const TIER_LABELS = { free: 'Free', seedling: 'Seedling', vegging: 'Vegging', flowering: 'Flowering', harvest: 'Harvest' }
 
 // Resizes/compresses an image client-side before sending it anywhere — keeps
 // the request small and image tokens cheap. Returns a JPEG blob + its base64
@@ -353,8 +353,9 @@ export default function PlantAI() {
                 </p>
                 <p className="flex items-start gap-2">
                   <Gauge size={15} className="mt-0.5 shrink-0 text-green" />
-                  Free accounts get 10 diagnoses/week. Patreon supporters ($20+) get 100/week, and $100+ patrons
-                  get unlimited — see <a href="/membership" className="text-green hover:text-green-soft">Membership</a>.
+                  Free accounts get 10 diagnoses/week. Seedling ($5+) gets 25/week, Vegging &amp; Flowering ($20+)
+                  get 100/week, and Harvest ($100+) gets unlimited — see{' '}
+                  <a href="/membership" className="text-green hover:text-green-soft">Membership</a>.
                 </p>
               </div>
             </div>
