@@ -1,5 +1,6 @@
-import { PageHeader, MediaPlaceholder, StubNote } from '../components/ui.jsx'
-import { ExternalLink, Info, Leaf, Sun, Timer, Tag } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { PageHeader, StubNote } from '../components/ui.jsx'
+import { ExternalLink, Info, Leaf, Sun, Timer, Tag, Handshake } from 'lucide-react'
 
 const companies = [
   {
@@ -18,7 +19,6 @@ const companies = [
     tags: ['Feminized', 'California Genetics'],
     url: 'https://humboldtseedcompany.com/',
   },
-  { name: 'Seed Company Three', blurb: 'High-yield hydroponic strains. Placeholder — partnership pending.', tags: ['High-yield', 'Indoor'] },
 ]
 
 const strains = [
@@ -48,8 +48,8 @@ export default function Seeds() {
         </div>
 
         <StubNote>
-          FastBuds and Humboldt Seed Company are our live seed partners — more companies drop in here as
-          affiliate inquiries come back.
+          FastBuds and Humboldt Seed Company are our live seed partners. Breeders looking to get featured
+          can apply directly below.
         </StubNote>
 
         {/* Companies */}
@@ -57,13 +57,9 @@ export default function Seeds() {
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {companies.map((c) => (
             <div key={c.name} className="card-hover flex flex-col p-6">
-              {c.logo ? (
-                <div className="mb-5 flex aspect-[16/9] w-full items-center justify-center rounded-2xl border border-white/10 bg-surface2 p-8">
-                  <img src={c.logo} alt={`${c.name} logo`} className="max-h-full max-w-full object-contain" />
-                </div>
-              ) : (
-                <MediaPlaceholder ratio="aspect-[16/9]" label="Company logo" className="mb-5" />
-              )}
+              <div className="mb-5 flex aspect-[16/9] w-full items-center justify-center rounded-2xl border border-white/10 bg-surface2 p-8">
+                <img src={c.logo} alt={`${c.name} logo`} className="max-h-full max-w-full object-contain" />
+              </div>
               <div className="flex flex-wrap gap-2">
                 {c.tags.map((t) => (
                   <span key={t} className="chip"><Leaf size={12} className="text-green" /> {t}</span>
@@ -97,6 +93,20 @@ export default function Seeds() {
               )}
             </div>
           ))}
+
+          <div className="card-hover flex flex-col items-center p-6 text-center">
+            <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple/10 text-purple">
+              <Handshake size={26} />
+            </span>
+            <h3 className="mt-5 text-lg font-600 text-fg">Are you a breeder?</h3>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
+              We're always looking for more genetics to feature. If you run a seed company and want your
+              strains in front of our growers, tell us about it.
+            </p>
+            <Link to="/contact" className="btn-primary mt-5 w-full">
+              Submit your info <Handshake size={15} />
+            </Link>
+          </div>
         </div>
 
         {/* Strain table */}
