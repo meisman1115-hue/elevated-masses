@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Instagram, Youtube, Mail, Leaf } from 'lucide-react'
+import { TikTokIcon } from './icons.jsx'
 
 const columns = [
   {
@@ -40,19 +41,25 @@ export default function Footer() {
           </p>
           <div className="mt-5 flex items-center gap-3">
             {[
-              { icon: Instagram, label: 'Instagram', href: '#' },
+              { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/mrgrowurown/' },
+              { icon: TikTokIcon, label: 'TikTok', href: 'https://www.tiktok.com/@elevatedmasses' },
               { icon: Youtube, label: 'YouTube', href: '#' },
               { icon: Mail, label: 'Email', href: '/contact' },
-            ].map(({ icon: Icon, label, href }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-muted transition-colors hover:border-green/50 hover:text-green"
-              >
-                <Icon size={18} />
-              </a>
-            ))}
+            ].map(({ icon: Icon, label, href }) => {
+              const external = href.startsWith('http')
+              return (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-muted transition-colors hover:border-green/50 hover:text-green"
+                >
+                  <Icon size={18} />
+                </a>
+              )
+            })}
           </div>
         </div>
 
