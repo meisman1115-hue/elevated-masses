@@ -21,16 +21,26 @@ export default function About() {
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <MediaPlaceholder ratio="aspect-[4/3]" label="Founder / grow room photo" />
           <div>
-            <SectionHeading eyebrow="Our story" title="Built by growers, for growers" />
+            <SectionHeading eyebrow="Our story" title="Built by a grower, for growers" />
             <div className="mt-5 space-y-4 text-muted">
               <p>
-                Elevated Masses started with a simple idea: great indoor growing shouldn't be locked
-                behind expensive setups or gatekept knowledge. <span className="text-fg">This is placeholder copy</span> —
-                drop in your real story, mission and background here.
+                I got into growing out of necessity — health reasons pushed me toward cannabis, and
+                dispensary prices pushed me toward growing it myself. What started as a way to afford my
+                own medicine turned into a decade-long education in plant science, problem-solving, and
+                patience. Learning on limited resources meant every mistake was a lesson, and every lesson
+                mattered.
               </p>
               <p>
-                From digital blueprints and step-by-step build guides to curated gear, seeds and a
-                community forum, everything here is designed to help you grow higher — wherever you are.
+                Along the way, I ran into a culture of gatekeeping — growers who treated basic knowledge
+                like a secret club membership, hoarding information that should've been free. So I taught
+                myself through countless nights of videos, blogs, and Reddit threads, piecing together what
+                should have just been handed to me.
+              </p>
+              <p>
+                <span className="text-fg">Elevated Masses is my answer to that gatekeeping</span>: a place
+                built by a grower, for growers, where accurate science-backed information is free and
+                welcome to everyone — beginner or expert. This plant deserves to be understood, not
+                hoarded. So learn, grow, and share.
               </p>
             </div>
             <Link to="/contact" className="btn-primary mt-7">Get in touch <ArrowRight size={16} /></Link>
