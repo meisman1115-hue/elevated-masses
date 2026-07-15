@@ -12,10 +12,11 @@ async function loadGeoJSON(path) {
 }
 
 export async function loadMapPolygons() {
-  const [world, us, ca] = await Promise.all([
+  const [world, us, ca, lakes] = await Promise.all([
     loadGeoJSON('/data/world-countries.min.geojson'),
     loadGeoJSON('/data/us-states.min.geojson'),
     loadGeoJSON('/data/canada-provinces.min.geojson'),
+    loadGeoJSON('/data/lakes.min.geojson'),
   ])
 
   const worldFeatures = world.features.map((f) => {
@@ -33,7 +34,24 @@ export async function loadMapPolygons() {
     return { ...f, properties: { ...f.properties, kind: 'ca-province', ...law } }
   })
 
-  return [...worldFeatures, ...usFeatures, ...caFeatures]
+  // Landlocked lakes/seas the country/state/province polygons treat as holes
+  // (no land there) — colored by whichever jurisdiction each piece belongs
+  // to, so they read as part of the surrounding legal-status color instead
+  // of empty "ocean". Lakes that straddle a real border (Great Lakes, the
+  // Caspian Sea, Reindeer Lake, ...) are pre-split into one piece per
+  // jurisdiction — see scripts/prepare-lakes-data.mjs.
+  const lakeFeatures = lakes.features.map((f) => {
+    const { ownerKind, ownerKey, ownerName, name: lakeName } = f.properties
+    const law =
+      ownerKind === 'country'
+        ? (countryLaws[ownerKey] ?? DEFAULT_COUNTRY_STATUS(ownerName))
+        : ownerKind === 'us-state'
+          ? (usStateLaws[ownerKey] ?? DEFAULT_COUNTRY_STATUS(ownerKey))
+          : (canadaProvinceLaws[ownerKey] ?? DEFAULT_COUNTRY_STATUS(ownerKey))
+    return { ...f, properties: { name: ownerName, lakeName, kind: 'lake', ...law } }
+  })
+
+  return [...worldFeatures, ...usFeatures, ...caFeatures, ...lakeFeatures]
 }
 
 export function colorForStatus(status) {
