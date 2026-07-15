@@ -1,7 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Clock, ChefHat, Users, FlaskConical, Leaf, AlertTriangle } from 'lucide-react'
 import { getRecipe } from '../lib/recipes.js'
-import { MediaPlaceholder } from '../components/ui.jsx'
 import ContentBlocks from '../components/ContentBlocks.jsx'
 import NotFound from './NotFound.jsx'
 
@@ -38,7 +37,7 @@ export default function RecipePost() {
       </div>
 
       <div className="container-em max-w-3xl py-10">
-        <MediaPlaceholder ratio="aspect-[16/9]" label="Finished dish photo" className="mb-8" />
+        <img src={r.cover} alt={r.title} className="mb-8 aspect-[16/9] w-full rounded-2xl border border-white/10 object-cover" />
 
         {infused && r.dose && (
           <div className="mb-8 flex items-start gap-3 rounded-xl border border-purple/30 bg-purple/5 px-4 py-3">

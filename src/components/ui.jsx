@@ -23,19 +23,22 @@ export function MediaPlaceholder({ label = 'Image placeholder', ratio = 'aspect-
   )
 }
 
-// Video placeholder with a play affordance.
-export function VideoPlaceholder({ label = 'Video placeholder', ratio = 'aspect-video', className = '' }) {
+// Video placeholder with a play affordance. Pass `image` to show a real photo
+// behind the play button instead of the plain gradient (e.g. an event poster).
+export function VideoPlaceholder({ label = 'Video placeholder', ratio = 'aspect-video', className = '', image }) {
   return (
     <div
       className={`relative flex ${ratio} w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-surface ${className}`}
       role="img"
       aria-label={label}
     >
+      {image && <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" />}
       <div
         className="absolute inset-0 opacity-70"
         style={{
-          backgroundImage:
-            'radial-gradient(70% 70% at 50% 40%, rgba(168,85,247,0.16), transparent 60%)',
+          backgroundImage: image
+            ? 'linear-gradient(180deg, rgba(8,10,12,0.15), rgba(8,10,12,0.75))'
+            : 'radial-gradient(70% 70% at 50% 40%, rgba(168,85,247,0.16), transparent 60%)',
         }}
       />
       <div className="relative flex flex-col items-center gap-3">

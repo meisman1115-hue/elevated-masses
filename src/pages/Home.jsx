@@ -3,7 +3,7 @@ import {
   ArrowRight, Sprout, FileText, Wrench, Users, ShoppingBag,
   Leaf, MessageSquare, Calendar, ScanLine,
 } from 'lucide-react'
-import { MediaPlaceholder, SectionHeading } from '../components/ui.jsx'
+import { SectionHeading } from '../components/ui.jsx'
 import { GrowRoomScene, LeafMotif } from '../components/illustrations.jsx'
 import { posts } from '../lib/posts.js'
 
@@ -133,7 +133,7 @@ export default function Home() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {featuredPosts.map((post) => (
             <Link key={post.slug} to={`/blog/${post.slug}`} className="card-hover overflow-hidden">
-              <MediaPlaceholder ratio="aspect-[16/10]" label="Post cover" className="rounded-none border-0 border-b border-white/10" />
+              <img src={post.cover} alt={post.title} className="aspect-[16/10] w-full border-b border-white/10 object-cover" />
               <div className="p-5">
                 <span className="chip">{post.tag}</span>
                 <h3 className="mt-3 text-lg font-600 leading-snug text-fg">{post.title}</h3>

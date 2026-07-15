@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { PageHeader, MediaPlaceholder, StubNote } from '../components/ui.jsx'
+import { PageHeader, StubNote } from '../components/ui.jsx'
 import { Clock, ChefHat, Leaf, FlaskConical, ArrowRight } from 'lucide-react'
 import { recipes } from '../lib/recipes.js'
 
@@ -50,7 +50,7 @@ export default function Recipes() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((r) => (
             <Link key={r.slug} to={`/recipes/${r.slug}`} className="card-hover flex flex-col overflow-hidden">
-              <MediaPlaceholder ratio="aspect-[16/10]" label="Recipe photo" className="rounded-none border-0 border-b border-white/10" />
+              <img src={r.cover} alt={r.title} className="aspect-[16/10] w-full border-b border-white/10 object-cover" />
               <div className="flex flex-1 flex-col p-5">
                 <span className={`chip w-fit ${r.type === 'infused' ? 'text-purple-soft' : 'text-green'}`}>
                   {r.type === 'infused' ? <FlaskConical size={12} /> : <Leaf size={12} />}

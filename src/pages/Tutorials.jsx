@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { PageHeader, MediaPlaceholder, StubNote } from '../components/ui.jsx'
-import { Clock, Sprout, ArrowRight, GraduationCap } from 'lucide-react'
+import { PageHeader, StubNote } from '../components/ui.jsx'
+import { Clock, ArrowRight, GraduationCap } from 'lucide-react'
 import { tutorials } from '../lib/tutorials.js'
 
 export default function Tutorials() {
@@ -21,7 +21,7 @@ export default function Tutorials() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {tutorials.map((t) => (
             <Link key={t.slug} to={`/tutorials/${t.slug}`} className="card-hover flex flex-col overflow-hidden">
-              <MediaPlaceholder ratio="aspect-[16/10]" label="Tutorial image" icon={Sprout} className="rounded-none border-0 border-b border-white/10" />
+              <img src={t.cover} alt={t.title} className="aspect-[16/10] w-full border-b border-white/10 object-cover" />
               <div className="flex flex-1 flex-col p-5">
                 <span className="chip w-fit"><GraduationCap size={12} className="text-green" /> {t.category}</span>
                 <h3 className="mt-3 text-lg font-600 leading-snug text-fg">{t.title}</h3>

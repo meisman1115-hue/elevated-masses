@@ -1,7 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Clock, GraduationCap, Check, X } from 'lucide-react'
 import { getTutorial } from '../lib/tutorials.js'
-import { MediaPlaceholder } from '../components/ui.jsx'
 import ContentBlocks from '../components/ContentBlocks.jsx'
 import NotFound from './NotFound.jsx'
 
@@ -33,7 +32,7 @@ export default function TutorialPost() {
       </div>
 
       <div className="container-em max-w-3xl py-10">
-        <MediaPlaceholder ratio="aspect-[16/9]" label="Tutorial cover image" className="mb-8" />
+        <img src={t.cover} alt={t.title} className="mb-8 aspect-[16/9] w-full rounded-2xl border border-white/10 object-cover" />
 
         <ContentBlocks blocks={t.body} />
 

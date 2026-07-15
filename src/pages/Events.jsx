@@ -22,7 +22,12 @@ export default function Events() {
       <div className="container-em py-12">
         {/* Featured event */}
         <div className="grid overflow-hidden rounded-3xl border border-purple/25 bg-surface/50 lg:grid-cols-2">
-          <VideoPlaceholder label="Event highlight reel" ratio="aspect-video lg:aspect-auto lg:h-full" className="rounded-none border-0" />
+          <VideoPlaceholder
+            label="Event highlight reel"
+            ratio="aspect-video lg:aspect-auto lg:h-full"
+            className="rounded-none border-0"
+            image="/events/paint-night.jpg"
+          />
           <div className="flex flex-col justify-center p-8 sm:p-10">
             <span className="chip w-fit"><Ticket size={13} className="text-purple-soft" /> Featured event</span>
             <h2 className="mt-4 text-2xl font-700 text-fg sm:text-3xl">Blunts &amp; Brushes — Paint Night</h2>

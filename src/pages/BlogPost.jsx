@@ -1,7 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Clock, Calendar, User, Info } from 'lucide-react'
 import { getPost, posts } from '../lib/posts.js'
-import { MediaPlaceholder } from '../components/ui.jsx'
 import NotFound from './NotFound.jsx'
 
 // Renders one content block from a post body.
@@ -81,7 +80,7 @@ export default function BlogPost() {
 
       {/* Body */}
       <div className="container-em max-w-3xl py-10">
-        <MediaPlaceholder ratio="aspect-[16/9]" label="Article cover image" className="mb-8" />
+        <img src={post.cover} alt={post.title} className="mb-8 aspect-[16/9] w-full rounded-2xl border border-white/10 object-cover" />
         {post.body.map((block, i) => (
           <Block key={i} block={block} />
         ))}
@@ -98,7 +97,7 @@ export default function BlogPost() {
         <div className="mt-6 grid gap-6 sm:grid-cols-3">
           {more.map((p) => (
             <Link key={p.slug} to={`/blog/${p.slug}`} className="card-hover flex flex-col overflow-hidden">
-              <MediaPlaceholder ratio="aspect-[16/10]" label="Post cover" className="rounded-none border-0 border-b border-white/10" />
+              <img src={p.cover} alt={p.title} className="aspect-[16/10] w-full border-b border-white/10 object-cover" />
               <div className="flex flex-1 flex-col p-5">
                 <span className="chip w-fit">{p.tag}</span>
                 <h3 className="mt-3 text-base font-600 leading-snug text-fg">{p.title}</h3>
