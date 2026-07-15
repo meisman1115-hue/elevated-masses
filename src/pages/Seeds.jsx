@@ -11,7 +11,13 @@ const companies = [
     promoCode: 'UROWN',
     promoText: '15% off your order',
   },
-  { name: 'Seed Company Two', blurb: 'Heirloom vegetable & herb seeds for hydro. Placeholder — partnership pending.', tags: ['Heirloom', 'Herbs'] },
+  {
+    name: 'Humboldt Seed Company',
+    logo: '/logos/humboldt-seed-co.webp',
+    blurb: 'California genetics bred in the Emerald Triangle — a long-running, well-known name in feminized cannabis seeds for growers who want proven, stable lines.',
+    tags: ['Feminized', 'California Genetics'],
+    url: 'https://humboldtseedcompany.com/',
+  },
   { name: 'Seed Company Three', blurb: 'High-yield hydroponic strains. Placeholder — partnership pending.', tags: ['High-yield', 'Indoor'] },
 ]
 
@@ -42,8 +48,8 @@ export default function Seeds() {
         </div>
 
         <StubNote>
-          FastBuds is our first live seed partner — more companies drop in here as affiliate inquiries
-          come back.
+          FastBuds and Humboldt Seed Company are our live seed partners — more companies drop in here as
+          affiliate inquiries come back.
         </StubNote>
 
         {/* Companies */}
