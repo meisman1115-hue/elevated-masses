@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PageHeader, MediaPlaceholder, SectionHeading } from '../components/ui.jsx'
+import { PageHeader, SectionHeading } from '../components/ui.jsx'
 import { Target, Users, Sprout, ArrowRight } from 'lucide-react'
 
 const values = [
@@ -19,7 +19,11 @@ export default function About() {
 
       <div className="container-em py-12">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <MediaPlaceholder ratio="aspect-[4/3]" label="Founder / grow room photo" />
+          <img
+            src="/about/founder.jpg"
+            alt="Elevated Masses founder inspecting a flowering plant up close in the grow tent"
+            className="aspect-[4/5] w-full rounded-2xl border border-white/10 object-cover"
+          />
           <div>
             <SectionHeading eyebrow="Our story" title="Built by a grower, for growers" />
             <div className="mt-5 space-y-4 text-muted">
@@ -44,6 +48,22 @@ export default function About() {
               </p>
             </div>
             <Link to="/contact" className="btn-primary mt-7">Get in touch <ArrowRight size={16} /></Link>
+          </div>
+        </div>
+
+        <div className="mt-20">
+          <SectionHeading eyebrow="Behind the scenes" title="Inside the tent" />
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            <img
+              src="/about/grow-1.jpg"
+              alt="A full canopy of flowering plants under a VIVOSUN LED light in the grow tent"
+              className="aspect-[4/3] w-full rounded-2xl border border-white/10 object-cover"
+            />
+            <img
+              src="/about/grow-2.jpg"
+              alt="A dense, mature flowering canopy under a full-spectrum LED bar"
+              className="aspect-[4/3] w-full rounded-2xl border border-white/10 object-cover"
+            />
           </div>
         </div>
 
