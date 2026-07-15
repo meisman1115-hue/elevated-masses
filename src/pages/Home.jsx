@@ -4,7 +4,8 @@ import {
   Leaf, MessageSquare, Calendar, ScanLine,
 } from 'lucide-react'
 import { SectionHeading } from '../components/ui.jsx'
-import { GrowRoomScene, LeafMotif } from '../components/illustrations.jsx'
+import { LeafMotif } from '../components/illustrations.jsx'
+import GrowCam from '../components/GrowCam.jsx'
 import { posts } from '../lib/posts.js'
 
 const pillars = [
@@ -71,7 +72,7 @@ export default function Home() {
           </div>
 
           <div className="animate-fade-up [animation-delay:120ms]">
-            <GrowRoomScene className="drop-shadow-[0_0_40px_rgba(139,255,60,0.15)]" />
+            <GrowCam className="drop-shadow-[0_0_40px_rgba(139,255,60,0.15)]" />
           </div>
         </div>
       </section>

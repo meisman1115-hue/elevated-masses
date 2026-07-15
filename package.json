@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check-links": "node scripts/check-affiliate-links.mjs",
-    "generate-pdfs": "node scripts/generate-build-pdfs.mjs"
+    "generate-pdfs": "node scripts/generate-build-pdfs.mjs",
+    "upload-grow-cam": "node --env-file=.env scripts/upload-grow-cam-snapshot.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
