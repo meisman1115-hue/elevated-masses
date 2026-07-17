@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck, Sprout } from 'lucide-react'
 
 const STORAGE_KEY = 'em-age-verified-21'
 const MIN_AGE = 21
@@ -73,7 +73,16 @@ export default function AgeGate() {
             <p className="mt-3 text-sm leading-relaxed text-muted">
               Sorry — you must be {MIN_AGE} or older to view Elevated Masses. Please close this tab.
             </p>
-            <button type="button" onClick={() => setStatus('prompt')} className="btn-ghost mt-8">
+            <a
+              href="/plant-helper"
+              className="btn-primary mt-8 w-full justify-center"
+            >
+              <Sprout size={16} /> Use our free Plant Helper tool instead
+            </a>
+            <p className="mt-3 text-xs text-muted/60">
+              A general plant-diagnosis tool with no age restriction or cannabis content.
+            </p>
+            <button type="button" onClick={() => setStatus('prompt')} className="btn-ghost mt-4">
               Go back
             </button>
           </>
