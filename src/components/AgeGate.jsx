@@ -63,6 +63,12 @@ export default function AgeGate() {
                 No, I'm under {MIN_AGE}
               </button>
             </div>
+            <a
+              href="/plant-helper"
+              className="mt-4 flex items-center justify-center gap-1.5 text-sm text-green hover:text-green-soft"
+            >
+              <Sprout size={14} /> Just here for the free Plant Helper tool
+            </a>
             <p className="mt-5 text-xs text-muted/60">
               We store your confirmation on this device so we don't ask every visit.
             </p>
