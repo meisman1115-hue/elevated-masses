@@ -50,11 +50,16 @@ export default {
           '0%, 100%': { transform: 'scale(1.25) rotate(0deg) translate(0, 0)' },
           '50%': { transform: 'scale(1.32) rotate(2.5deg) translate(1.5%, -1.5%)' },
         },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 0.6s ease-out both',
         'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
         'smoke-drift': 'smoke-drift 32s ease-in-out infinite',
+        'fade-in': 'fade-in 0.5s ease-out both',
       },
     },
   },

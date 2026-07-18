@@ -16,30 +16,48 @@ const INTERVAL_MS = 6000
 
 // Cycles through past/current grow photos in the homepage hero slot. Falls
 // back to the illustrated grow scene until at least one photo is dropped in.
+// Only the current photo is ever mounted — with 60+ real photos now in the
+// folder, rendering all of them at once (as the old crossfade approach did)
+// would force the browser to download every photo on page load.
 export default function GrowGallery({ className = '' }) {
   const [index, setIndex] = useState(0)
+  const [fadeKey, setFadeKey] = useState(0)
   const hasPhotos = photos.length > 0
   const hasMultiple = photos.length > 1
 
   useEffect(() => {
     if (!hasMultiple) return
-    const id = setInterval(() => setIndex((i) => (i + 1) % photos.length), INTERVAL_MS)
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % photos.length)
+    }, INTERVAL_MS)
     return () => clearInterval(id)
   }, [hasMultiple])
+
+  // Preload the next photo in the background so the transition feels smooth
+  // without ever mounting more than one <img> at a time.
+  useEffect(() => {
+    if (!hasMultiple) return
+    const next = new Image()
+    next.src = photos[(index + 1) % photos.length]
+  }, [index, hasMultiple])
+
+  useEffect(() => {
+    setFadeKey((k) => k + 1)
+  }, [index])
+
+  function goTo(i) {
+    setIndex((i + photos.length) % photos.length)
+  }
 
   return (
     <div className={`relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-surface ${className}`}>
       {hasPhotos ? (
-        photos.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt={`Grow photo ${i + 1}`}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
-              i === index ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-        ))
+        <img
+          key={fadeKey}
+          src={photos[index]}
+          alt={`Grow photo ${index + 1}`}
+          className="absolute inset-0 h-full w-full animate-fade-in object-cover"
+        />
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
           <GrowRoomScene className="max-h-full max-w-[70%] opacity-90" />
@@ -51,7 +69,7 @@ export default function GrowGallery({ className = '' }) {
         <>
           <button
             type="button"
-            onClick={() => setIndex((i) => (i - 1 + photos.length) % photos.length)}
+            onClick={() => goTo(index - 1)}
             className="absolute left-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70"
             aria-label="Previous photo"
           >
@@ -59,23 +77,15 @@ export default function GrowGallery({ className = '' }) {
           </button>
           <button
             type="button"
-            onClick={() => setIndex((i) => (i + 1) % photos.length)}
+            onClick={() => goTo(index + 1)}
             className="absolute right-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70"
             aria-label="Next photo"
           >
             <ChevronRight size={18} />
           </button>
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-            {photos.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setIndex(i)}
-                aria-label={`Go to photo ${i + 1}`}
-                className={`h-1.5 rounded-full transition-all ${i === index ? 'w-5 bg-green' : 'w-1.5 bg-white/40'}`}
-              />
-            ))}
-          </div>
+          <span className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2.5 py-1 text-xs text-white backdrop-blur">
+            {index + 1} / {photos.length}
+          </span>
         </>
       )}
     </div>
