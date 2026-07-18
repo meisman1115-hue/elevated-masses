@@ -26,6 +26,10 @@ export default {
         display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      fontWeight: {
+        600: '600',
+        700: '700',
+      },
       borderColor: {
         DEFAULT: 'rgba(255,255,255,0.08)',
       },
