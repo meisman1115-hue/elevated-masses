@@ -6,6 +6,29 @@ import NotFound from './NotFound.jsx'
 // Renders one content block from a post body.
 function Block({ block }) {
   switch (block.type) {
+    case 'table':
+      return (
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+          <table className="w-full min-w-[480px] text-left text-sm">
+            <thead className="bg-surface/70 text-xs uppercase tracking-wide text-muted">
+              <tr>
+                {block.headers.map((h) => (
+                  <th key={h} className="px-5 py-4 font-600">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {block.rows.map((row, i) => (
+                <tr key={i} className="transition-colors hover:bg-white/[0.03]">
+                  {row.map((cell, j) => (
+                    <td key={j} className={`px-5 py-4 ${j === 0 ? 'font-600 text-fg' : 'text-muted'}`}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
     case 'h2':
       return <h2 className="mt-10 text-2xl font-700 text-fg">{block.text}</h2>
     case 'h3':
