@@ -12,13 +12,6 @@ const companies = [
     promoCode: 'UROWN',
     promoText: '15% off your order',
   },
-  {
-    name: 'Humboldt Seed Company',
-    logo: '/logos/humboldt-seed-co.webp',
-    blurb: 'California genetics bred in the Emerald Triangle — a long-running, well-known name in feminized cannabis seeds for growers who want proven, stable lines.',
-    tags: ['Feminized', 'California Genetics'],
-    url: 'https://humboldtseedcompany.com/',
-  },
 ]
 
 const strains = [
@@ -48,13 +41,12 @@ export default function Seeds() {
         </div>
 
         <StubNote>
-          FastBuds and Humboldt Seed Company are our live seed partners. Breeders looking to get featured
-          can apply directly below.
+          FastBuds is our live seed partner. Breeders looking to get featured can apply directly below.
         </StubNote>
 
         {/* Companies */}
         <h2 className="mt-12 text-2xl font-700 text-fg">Featured seed companies</h2>
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
           {companies.map((c) => (
             <div key={c.name} className="card-hover flex flex-col p-6">
               <div className="mb-5 flex aspect-[16/9] w-full items-center justify-center rounded-2xl border border-white/10 bg-surface2 p-8">
