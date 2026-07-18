@@ -1,5 +1,4 @@
-// Recipe content. `type` is 'infused' or 'fresh' — used by the filter on the
-// Recipes page. To add one, copy an object and edit it.
+// Recipe content — infused edibles only. To add one, copy an object and edit it.
 
 export const recipes = [
   {
@@ -30,33 +29,6 @@ export const recipes = [
     ],
   },
   {
-    slug: 'hydro-basil-pesto',
-    type: 'fresh',
-    title: 'Fresh Hydroponic Basil Pesto',
-    cover: '/recipes/basil-pesto.jpg',
-    excerpt: 'Turn a big hydroponic basil harvest into bright, freezer-friendly pesto.',
-    time: '15 min',
-    difficulty: 'Easy',
-    yields: 'About 1 cup',
-    ingredients: [
-      '2 packed cups fresh basil leaves',
-      '1/2 cup olive oil',
-      '1/3 cup pine nuts (or walnuts)',
-      '1/2 cup grated parmesan',
-      '2 garlic cloves',
-      'Salt and pepper to taste',
-    ],
-    steps: [
-      'Rinse and thoroughly dry the basil — wet leaves make watery pesto.',
-      'Toast the nuts in a dry pan for 2–3 minutes until fragrant.',
-      'Blend basil, nuts, garlic, and parmesan while drizzling in the oil.',
-      'Season to taste, then use fresh or freeze in an ice-cube tray for portions.',
-    ],
-    notes: [
-      { type: 'p', text: 'Freshly harvested hydroponic basil is milder and sweeter than store-bought — you may need a little less than usual.' },
-    ],
-  },
-  {
     slug: 'infused-honey',
     type: 'infused',
     title: 'Slow-Infused Honey',
@@ -79,32 +51,6 @@ export const recipes = [
     ],
     notes: [
       { type: 'callout', text: 'Keep the temperature under 200°F the entire time. Low and slow is the whole trick here.' },
-    ],
-  },
-  {
-    slug: 'garden-herb-salad',
-    type: 'fresh',
-    title: 'Just-Picked Garden Herb Salad',
-    cover: '/recipes/garden-herb-salad.jpg',
-    excerpt: 'A five-minute salad that shows off tender hydroponic greens and herbs.',
-    time: '5 min',
-    difficulty: 'Easy',
-    yields: '2 servings',
-    ingredients: [
-      '4 cups mixed hydroponic lettuce & greens',
-      '1/4 cup mixed soft herbs (dill, mint, basil)',
-      '2 tbsp olive oil',
-      '1 tbsp lemon juice',
-      'Flaky salt',
-    ],
-    steps: [
-      'Harvest greens just before serving and rinse gently.',
-      'Whisk olive oil, lemon juice, and a pinch of salt.',
-      'Toss greens and herbs with just enough dressing to coat.',
-      'Finish with flaky salt and serve immediately.',
-    ],
-    notes: [
-      { type: 'p', text: 'The fresher the greens, the less dressing you need. Let the harvest be the star.' },
     ],
   },
 ]
