@@ -127,8 +127,20 @@ for (const lake of lakeFeatures) {
 
   const owners_ = [...cellsByOwner.values()]
   for (const { owner, cells } of owners_) {
-    const merged = cells.length === 1 ? cells[0] : turf.union(turf.featureCollection(cells))
+    let merged = cells.length === 1 ? cells[0] : turf.union(turf.featureCollection(cells))
     if (!merged) continue
+
+    // Unioning many small grid cells often leaves the result topologically
+    // invalid (adjacent cells touching rather than fully dissolving) even
+    // though it looks fine — react-globe.gl's polygon layer can choke on
+    // that (whole-globe render corruption on hover). A tiny grow-then-shrink
+    // buffer is a standard GIS trick to heal that without changing the shape.
+    if (!turf.booleanValid(merged)) {
+      const grown = turf.buffer(merged, 0.5, { units: 'kilometers' })
+      const healed = grown ? turf.buffer(grown, -0.5, { units: 'kilometers' }) : null
+      if (healed && turf.booleanValid(healed)) merged = healed
+    }
+
     outputFeatures.push({
       type: 'Feature',
       geometry: merged.geometry,
