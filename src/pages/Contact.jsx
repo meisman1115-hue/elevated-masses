@@ -4,7 +4,7 @@ import { Mail, MessageSquare, Instagram, Send } from 'lucide-react'
 import { TikTokIcon } from '../components/icons.jsx'
 
 const contactChannels = [
-  { icon: Mail, title: 'Email', value: 'hello@elevatedmasses.com', note: 'Placeholder address', href: null },
+  { icon: Mail, title: 'Email', value: 'info@elevatedmasses.com', note: 'Best way to reach us', href: 'mailto:info@elevatedmasses.com' },
   { icon: Instagram, title: 'Instagram', value: '@mrgrowurown', note: 'Follow along', href: 'https://www.instagram.com/mrgrowurown/' },
   { icon: TikTokIcon, title: 'TikTok', value: '@elevatedmasses', note: 'Follow along', href: 'https://www.tiktok.com/@elevatedmasses' },
   { icon: MessageSquare, title: 'Forum', value: 'Ask the community', note: 'Public discussion', href: '/forum' },
@@ -67,9 +67,16 @@ export default function Contact() {
               if (!href) {
                 return <div key={title} className="card flex items-center gap-4 p-5">{inner}</div>
               }
-              if (href.startsWith('http')) {
+              if (href.startsWith('http') || href.startsWith('mailto:')) {
+                const external = href.startsWith('http')
                 return (
-                  <a key={title} href={href} target="_blank" rel="noopener noreferrer" className="card-hover flex items-center gap-4 p-5">
+                  <a
+                    key={title}
+                    href={href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                    className="card-hover flex items-center gap-4 p-5"
+                  >
                     {inner}
                   </a>
                 )
