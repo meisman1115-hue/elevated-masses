@@ -64,10 +64,12 @@ export default function AgeGate() {
               </button>
             </div>
             <a
-              href="/plant-helper"
+              href="https://theplantdiagnosticstool.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-4 flex items-center justify-center gap-1.5 text-sm text-green hover:text-green-soft"
             >
-              <Sprout size={14} /> Just here for the free Plant Helper tool
+              <Sprout size={14} /> Just here for the free plant diagnosis tool
             </a>
             <p className="mt-5 text-xs text-muted/60">
               We store your confirmation on this device so we don't ask every visit.
@@ -80,10 +82,12 @@ export default function AgeGate() {
               Sorry — you must be {MIN_AGE} or older to view Elevated Masses. Please close this tab.
             </p>
             <a
-              href="/plant-helper"
+              href="https://theplantdiagnosticstool.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary mt-8 w-full justify-center"
             >
-              <Sprout size={16} /> Use our free Plant Helper tool instead
+              <Sprout size={16} /> Try The, Plant Diagnostic Tool, Period.
             </a>
             <p className="mt-3 text-xs text-muted/60">
               A general plant-diagnosis tool with no age restriction or cannabis content.

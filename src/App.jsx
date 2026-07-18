@@ -17,7 +17,6 @@ import Tutorials from './pages/Tutorials.jsx'
 import TutorialPost from './pages/TutorialPost.jsx'
 import Downloads from './pages/Downloads.jsx'
 import PlantAI from './pages/PlantAI.jsx'
-import PlantHelper from './pages/PlantHelper.jsx'
 import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import NotFound from './pages/NotFound.jsx'
@@ -33,8 +32,7 @@ function MapFallback() {
   )
 }
 
-// The main site (behind the 21+ age gate, full nav/footer).
-function MainSite() {
+export default function App() {
   return (
     <Layout>
       <Routes>
@@ -66,16 +64,5 @@ function MainSite() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
-  )
-}
-
-export default function App() {
-  return (
-    <Routes>
-      {/* Standalone, all-ages plant diagnosis tool — no age gate, no cannabis
-          content, no site nav. Reached from the age gate's "under 21" screen. */}
-      <Route path="/plant-helper" element={<PlantHelper />} />
-      <Route path="/*" element={<MainSite />} />
-    </Routes>
   )
 }
