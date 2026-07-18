@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { GrowRoomScene } from './illustrations.jsx'
 
 // Every image dropped into src/assets/grow-photos/ is picked up automatically
@@ -8,16 +7,26 @@ const modules = import.meta.glob('/src/assets/grow-photos/*.{jpg,jpeg,JPG,JPEG,p
   eager: true,
   import: 'default',
 })
-const photos = Object.keys(modules)
-  .sort()
-  .map((path) => modules[path])
+
+// Fisher-Yates — shuffled once per page load so the rotation order varies
+// across visits without needing any click-through controls.
+function shuffle(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+const photos = shuffle(Object.values(modules))
 
 const INTERVAL_MS = 6000
 
-// Cycles through past/current grow photos in the homepage hero slot. Falls
-// back to the illustrated grow scene until at least one photo is dropped in.
-// Only the current photo is ever mounted — with 60+ real photos now in the
-// folder, rendering all of them at once (as the old crossfade approach did)
+// Auto-cycles through past/current grow photos in a random order in the
+// homepage hero slot. Falls back to the illustrated grow scene until at
+// least one photo is dropped in. Only the current photo is ever mounted —
+// with 60+ real photos now in the folder, rendering all of them at once
 // would force the browser to download every photo on page load.
 export default function GrowGallery({ className = '' }) {
   const [index, setIndex] = useState(0)
@@ -45,17 +54,13 @@ export default function GrowGallery({ className = '' }) {
     setFadeKey((k) => k + 1)
   }, [index])
 
-  function goTo(i) {
-    setIndex((i + photos.length) % photos.length)
-  }
-
   return (
     <div className={`relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-surface ${className}`}>
       {hasPhotos ? (
         <img
           key={fadeKey}
           src={photos[index]}
-          alt={`Grow photo ${index + 1}`}
+          alt="A photo from an Elevated Masses grow"
           className="absolute inset-0 h-full w-full animate-fade-in object-cover"
         />
       ) : (
@@ -63,30 +68,6 @@ export default function GrowGallery({ className = '' }) {
           <GrowRoomScene className="max-h-full max-w-[70%] opacity-90" />
           <p className="text-xs text-muted">Grow photos coming soon</p>
         </div>
-      )}
-
-      {hasMultiple && (
-        <>
-          <button
-            type="button"
-            onClick={() => goTo(index - 1)}
-            className="absolute left-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70"
-            aria-label="Previous photo"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={() => goTo(index + 1)}
-            className="absolute right-3 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70"
-            aria-label="Next photo"
-          >
-            <ChevronRight size={18} />
-          </button>
-          <span className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2.5 py-1 text-xs text-white backdrop-blur">
-            {index + 1} / {photos.length}
-          </span>
-        </>
       )}
     </div>
   )
