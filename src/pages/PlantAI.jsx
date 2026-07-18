@@ -353,9 +353,7 @@ export default function PlantAI() {
                 </p>
                 <p className="flex items-start gap-2">
                   <Gauge size={15} className="mt-0.5 shrink-0 text-green" />
-                  Free accounts get 10 diagnoses/week. Seedling ($5+) gets 25/week, Vegging &amp; Flowering ($20+)
-                  get 100/week, and Harvest ($100+) gets unlimited — see{' '}
-                  <a href="/membership" className="text-green hover:text-green-soft">Membership</a>.
+                  Free accounts get 10 diagnoses per week, reset Sunday at midnight UTC.
                 </p>
               </div>
             </div>

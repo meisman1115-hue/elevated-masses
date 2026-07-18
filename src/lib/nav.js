@@ -25,7 +25,6 @@ export const navGroups = [
     links: [
       { label: 'Forum', to: '/forum', desc: 'Connect with growers' },
       { label: 'Events', to: '/events', desc: 'Meetups & workshops' },
-      { label: 'Membership', to: '/membership', desc: 'Perks & 1-on-1 calls' },
     ],
   },
 ]
@@ -41,9 +40,6 @@ export const allNavLinks = [
 ]
 
 export const AMAZON_TAG = 'mrgrowurown-20'
-
-// Elevated Masses Patreon page.
-export const PATREON_URL = 'https://www.patreon.com/MrGrowUrOwn'
 
 // Helper to append the Amazon Associates tag to any amazon.com product URL.
 export function amazonLink(url) {

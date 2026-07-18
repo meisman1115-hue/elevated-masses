@@ -19,7 +19,6 @@ const columns = [
     links: [
       { label: 'Forum', to: '/forum' },
       { label: 'Events', to: '/events' },
-      { label: 'Membership', to: '/membership' },
       { label: 'Gear', to: '/gear' },
       { label: 'Seeds', to: '/seeds' },
       { label: 'About', to: '/about' },

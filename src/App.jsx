@@ -15,7 +15,6 @@ import Recipes from './pages/Recipes.jsx'
 import RecipePost from './pages/RecipePost.jsx'
 import Tutorials from './pages/Tutorials.jsx'
 import TutorialPost from './pages/TutorialPost.jsx'
-import Membership from './pages/Membership.jsx'
 import Downloads from './pages/Downloads.jsx'
 import PlantAI from './pages/PlantAI.jsx'
 import PlantHelper from './pages/PlantHelper.jsx'
@@ -52,7 +51,6 @@ function MainSite() {
         <Route path="/recipes/:slug" element={<RecipePost />} />
         <Route path="/tutorials" element={<Tutorials />} />
         <Route path="/tutorials/:slug" element={<TutorialPost />} />
-        <Route path="/membership" element={<Membership />} />
         <Route path="/downloads" element={<Downloads />} />
         <Route path="/plant-ai" element={<PlantAI />} />
         <Route
