@@ -98,13 +98,19 @@ export default function CannabisMap() {
     [],
   )
 
-  // Throttled hover handler. While auto-rotating with the cursor held still,
-  // the raycaster hits a *different* polygon on nearly every animation frame
-  // — without a limit, that fires a React state update (and brand-new
-  // accessor closures below) up to ~60x/sec, which overwhelms the polygon
-  // layer over an extended hover and can corrupt the render. Capping updates
-  // to a few per second keeps the highlight responsive but sane.
+  // While auto-rotating with the cursor held still, the raycaster hits a
+  // *different* polygon on nearly every animation frame. Throttling those
+  // updates (a few per second instead of ~60/sec) reduced but didn't
+  // eliminate a whole-globe render corruption bug — it can still recur with
+  // enough polygons on the globe. Since "hovering" a spot the mouse isn't
+  // intentionally over (the globe is moving, not the cursor) was never a
+  // meaningful interaction anyway, we just ignore hover entirely while
+  // auto-rotate is actually running (checked live off the controls object,
+  // since that also reflects the temporary pause during drag/zoom below —
+  // the `autoRotate` state only reflects the user's on/off toggle). Hover
+  // highlighting comes back the moment rotation stops.
   const handlePolygonHover = useCallback((d) => {
+    if (globeRef.current?.controls()?.autoRotate) return
     const now = performance.now()
     if (now - lastHoverUpdate.current < 120) return
     lastHoverUpdate.current = now
