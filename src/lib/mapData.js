@@ -11,12 +11,19 @@ async function loadGeoJSON(path) {
   return res.json()
 }
 
+// Note: this used to also merge in a `lakes.min.geojson` layer (built by
+// scripts/prepare-lakes-data.mjs) so major landlocked lakes/seas picked up
+// their surrounding jurisdiction's color instead of showing plain "ocean".
+// Reverted — the extra ~54 polygons it added pushed the globe's polygon
+// count past whatever threshold triggers a recurring react-globe.gl
+// rendering-corruption bug (whole globe turns solid-color and the hover
+// tooltip gets stuck on one place). The data/script are still in the repo
+// if this is ever worth revisiting with a fix or a different map library.
 export async function loadMapPolygons() {
-  const [world, us, ca, lakes] = await Promise.all([
+  const [world, us, ca] = await Promise.all([
     loadGeoJSON('/data/world-countries.min.geojson'),
     loadGeoJSON('/data/us-states.min.geojson'),
     loadGeoJSON('/data/canada-provinces.min.geojson'),
-    loadGeoJSON('/data/lakes.min.geojson'),
   ])
 
   const worldFeatures = world.features.map((f) => {
@@ -34,24 +41,7 @@ export async function loadMapPolygons() {
     return { ...f, properties: { ...f.properties, kind: 'ca-province', ...law } }
   })
 
-  // Landlocked lakes/seas the country/state/province polygons treat as holes
-  // (no land there) — colored by whichever jurisdiction each piece belongs
-  // to, so they read as part of the surrounding legal-status color instead
-  // of empty "ocean". Lakes that straddle a real border (Great Lakes, the
-  // Caspian Sea, Reindeer Lake, ...) are pre-split into one piece per
-  // jurisdiction — see scripts/prepare-lakes-data.mjs.
-  const lakeFeatures = lakes.features.map((f) => {
-    const { ownerKind, ownerKey, ownerName, name: lakeName } = f.properties
-    const law =
-      ownerKind === 'country'
-        ? (countryLaws[ownerKey] ?? DEFAULT_COUNTRY_STATUS(ownerName))
-        : ownerKind === 'us-state'
-          ? (usStateLaws[ownerKey] ?? DEFAULT_COUNTRY_STATUS(ownerKey))
-          : (canadaProvinceLaws[ownerKey] ?? DEFAULT_COUNTRY_STATUS(ownerKey))
-    return { ...f, properties: { name: ownerName, lakeName, kind: 'lake', ...law } }
-  })
-
-  return [...worldFeatures, ...usFeatures, ...caFeatures, ...lakeFeatures]
+  return [...worldFeatures, ...usFeatures, ...caFeatures]
 }
 
 export function colorForStatus(status) {
