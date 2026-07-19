@@ -17,7 +17,20 @@ function ScrollToTop() {
 }
 
 export default function Layout({ children }) {
-  const { authModalOpen, closeAuthModal } = useAuth()
+  const { authModalOpen, openAuthModal, closeAuthModal } = useAuth()
+
+  // Land here after clicking the email confirmation link — pop the sign-in
+  // modal straight open instead of leaving the user on a bare homepage.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('confirmed') === '1') {
+      openAuthModal()
+      params.delete('confirmed')
+      const search = params.toString()
+      window.history.replaceState({}, '', window.location.pathname + (search ? `?${search}` : ''))
+    }
+  }, [openAuthModal])
+
   return (
     <div className="flex min-h-dvh flex-col">
       <SmokeBackground />

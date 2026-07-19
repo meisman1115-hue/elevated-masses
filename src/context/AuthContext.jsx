@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { username } },
+      options: { data: { username }, emailRedirectTo: `${window.location.origin}/?confirmed=1` },
     })
     return { error }
   }, [])
