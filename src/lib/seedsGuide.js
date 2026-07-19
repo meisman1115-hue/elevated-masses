@@ -10,6 +10,7 @@ export const seedsGuideBlocks = [
   { type: 'p', text: 'Regular seeds are like a bag of mystery marbles. When you plant one, you don\'t know if it\'s going to grow into a boy plant (a male) or a girl plant (a female) — it\'s about a 50/50 chance either way.' },
   { type: 'p', text: 'Why does that matter? Only female plants grow the flowers we\'re after. Male plants grow pollen sacs instead, and if a male hangs around the girls too long, it will pollinate them and the females will spend their energy making seeds instead of big, resinous buds.' },
   { type: 'p', text: 'Regular seeds are the go-to for breeders — people trying to create new strains or cross different genetics together. If you want to make your own seeds or hunt for special phenotypes, you need males. The catch: you have to watch your plants carefully, identify the males early (usually around week 1–3 of flower), and pull them before they cause problems.' },
+  { type: 'callout', text: 'Regular seeds are photoperiod plants — they rely on their light schedule to know when to flower. Indoors, growers trigger this by switching from 18 hours of light to 12.' },
 
   { type: 'h3', text: 'Feminized Seeds (Fem Seeds)' },
   { type: 'p', text: 'Feminized seeds are like an all-girls team — guaranteed. Through a special process using a silver-based solution, breeders can stress a female plant into producing pollen. That pollen only carries female genetics, so when it\'s used to make seeds, the offspring come out female 99%+ of the time. No males. No guessing. No surprises.' },
