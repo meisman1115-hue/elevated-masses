@@ -322,6 +322,131 @@ export const posts = [
       { type: 'p', text: 'Mastering these three numbers gives you the same visibility into your plants\' nutrition that a blood panel gives a doctor. Check them consistently, keep records, and let the data guide your decisions — your plants will tell you everything you need to know.' },
     ],
   },
+  {
+    slug: 'preparing-coco-coir-bricks',
+    title: 'Preparing Coco Coir Bricks for Cannabis Cultivation',
+    tag: 'Growing Media',
+    cover: '/blog/coco-coir-substrate-prep.jpg',
+    excerpt: 'What coco coir actually is, why growers choose it, and the exact hydrate-rinse-buffer process that keeps it from causing a Cal-Mag deficiency two weeks into veg.',
+    readTime: '10 min',
+    date: 'Jul 19, 2026',
+    author: 'Elevated Masses',
+    body: [
+      { type: 'p', text: 'Coco coir is one of the most forgiving substrates you can grow cannabis in — but only if you prep it right. Straight out of the brick, it\'s loaded with the wrong salts and will strip calcium and magnesium away from your plant before it ever gets a chance to feed. This guide covers what coco actually is, why growers choose it, and the exact hydrate-rinse-buffer process that turns a cheap compressed brick into a plant-ready substrate.' },
+
+      { type: 'h2', text: 'What Coco Coir Actually Is' },
+      { type: 'p', text: 'Coco coir is the fibrous material extracted from the husk of a coconut, left over after the outer shell is processed for other coconut products. It\'s typically sold in three forms: coco pith/peat (the fine, spongy dust that holds most of the water), coco fiber (long strands that add structure and drainage channels), and coco chips (chunky pieces that boost aeration, similar to bark).' },
+      { type: 'p', text: 'A compressed brick is a blend of pith and fiber — ratios vary by brand, and better bricks list this on the packaging — squeezed to a fraction of its size for cheap shipping. A standard 5 kg brick expands roughly 12–15x by volume once fully hydrated.' },
+      { type: 'callout', text: 'Coco coir is mostly lignin and cellulose, and it carries a natural cation exchange capacity (CEC) — its fiber surfaces have a negative charge that binds positively-charged mineral ions. This single property is the entire reason buffering exists as a step.' },
+
+      { type: 'h2', text: 'Why Growers Choose Coco Coir' },
+      { type: 'h3', text: 'Advantages' },
+      { type: 'ul', items: [
+        'Near-neutral natural pH (5.5–6.5), unlike peat which runs acidic',
+        'Excellent water-holding capacity while still retaining air pockets — hard to overwater compared to peat or straight soil',
+        'Renewable byproduct of the coconut industry rather than a mined/harvested resource like peat moss',
+        'Breaks down far slower than peat, holding structure across a full veg-to-harvest cycle',
+        'Behaves like a hydroponic medium (feed-every-watering) but with more forgiveness than rockwool or clay pebbles',
+        'Reusable for 1–3 cycles if sterilized between runs',
+      ] },
+      { type: 'h3', text: 'Drawbacks to know going in' },
+      { type: 'ul', items: [
+        'Raw, unbuffered coco arrives with its exchange sites saturated in sodium and potassium and almost no calcium or magnesium — feeding into it causes a fast, ugly Cal-Mag deficiency',
+        'Low native nutrient content — coco is functionally inert, so you\'re responsible for 100% of the plant\'s nutrition',
+        'Quality varies enormously by brand — cheap bricks are often washed once, buffered poorly (or not at all), and carry high residual salt (EC)',
+        'Compacts over time without added aeration material',
+      ] },
+
+      { type: 'h2', text: 'Timing' },
+      { type: 'ul', items: [
+        'Prep coco 24–48 hours before you need it — hydration, rinsing, and buffering take real time, so don\'t try to prep and transplant same-day',
+        'Prep fresh coco for each new grow cycle if you can — reused coco loses buffering capacity and can carry root pathogens or pest eggs from the prior run',
+        'If reusing: sterilize with a 3% food-grade hydrogen peroxide flush, let it fully off-gas for 24 hours, then re-buffer from scratch as if it were new',
+        'Coco works from clone/seedling stage through flower — only your nutrient ratios change between veg and flower, not the substrate',
+      ] },
+
+      { type: 'h2', text: 'Where It\'s Used' },
+      { type: 'table', headers: ['System', 'How Coco Is Used'], rows: [
+        ['Fabric pots / hand-water containers', 'Straight coco or coco/perlite blend, hand-fed nutrient solution each watering'],
+        ['Drip/fertigation (bato buckets, coco slabs)', 'Packed in grow bags or buckets, fed via drip emitters on a timer — the most common commercial cannabis setup'],
+        ['Hybrid RDWC', 'Used only as a starter cube/plug for cloning or germination, then transplanted into net pots'],
+        ['Raised beds / living soil blends', 'The water-retentive backbone mixed with compost, worm castings, and aeration amendments'],
+        ['Seed starting / cloning', 'Plugs or finely sifted coco, kept consistently moist, no feed until first true leaves'],
+      ] },
+
+      { type: 'h2', text: 'Step-by-Step Brick Preparation' },
+      { type: 'p', text: 'What you\'ll need: 1 compressed coco brick (5 kg is the standard commercial size), a container 3–4x larger than the dry brick (a 20-gallon tub works for a 5 kg brick), pH-adjusted water, a calcium-magnesium supplement (Cal-Mag, CaliMagic, or calcium nitrate), a pH pen and an EC/TDS meter, and a garden fork or gloved hands for fluffing.' },
+
+      { type: 'h3', text: 'Step 1: Hydrate the brick' },
+      { type: 'p', text: 'Place the brick in your tub and pour 20–25 liters of warm water per 5 kg brick slowly over the top. Warm water penetrates the compressed fibers faster than cold. Let it sit 15–30 minutes, then break it apart by hand or fork. It should expand to roughly 60–70 liters of loose material. If dry pockets remain, add water in small increments — you\'re aiming for moist, not soggy.' },
+
+      { type: 'h3', text: 'Step 2: First rinse (flush the salts)' },
+      { type: 'p', text: 'Raw coco can carry an EC as high as 5–6 mS/cm straight out of the brick — almost entirely sodium and potassium. Run plain, pH\'d water (pH 5.5–6.0) through the hydrated coco until the runoff EC drops below roughly 1.0 mS/cm. This may take several passes. Skipping this step means you\'re buffering on top of a salt bath, which wastes your Cal-Mag.' },
+
+      { type: 'h3', text: 'Step 3: Buffer the cation exchange sites' },
+      { type: 'p', text: 'This is the step most new coco growers skip — and the one that causes the classic "unexplained Cal-Mag deficiency two weeks into veg." Because coco\'s exchange sites naturally hold sodium and potassium, feeding straight nutrient solution into unbuffered coco causes the coco itself to strip calcium and magnesium out of your feed before your plant ever sees it. Buffering pre-loads those exchange sites with Ca/Mg so they\'re already saturated and stop competing with your plant for nutrients.' },
+      { type: 'ol', items: [
+        'Mix a buffering solution: pH\'d water + a calcium-magnesium supplement dosed to reach an EC of roughly 1.2–2.0 mS/cm, pH ~6.2',
+        'Submerge or thoroughly saturate the rinsed coco in this solution for 12–24 hours',
+        'Drain and rinse once more with plain pH\'d water to remove excess surface salts',
+        'For premium results, double-buffer: repeat the soak once more with a fresh batch of Cal-Mag solution',
+      ] },
+
+      { type: 'h3', text: 'Step 4: Check and adjust' },
+      { type: 'p', text: 'Squeeze a handful of prepped coco and check the runoff EC and pH. You\'re looking for an EC under ~0.5–0.8 mS/cm and a pH of 5.8–6.2 before you consider it plant-ready. If it\'s still testing high, give it one more rinse.' },
+
+      { type: 'h3', text: 'Step 5: Fluff and finish' },
+      { type: 'p', text: 'Break up any remaining root-ball-like clumps by hand so the final texture is light and airy, not dense or matted. This is also your moment to work in aeration or amendment material before it goes into pots.' },
+      { type: 'callout', text: 'Shortcut: pre-buffered, pre-rinsed coco bricks exist (Roots Organics and similar) and cost more per brick — worth it if you want to skip Steps 2–3.' },
+
+      { type: 'h2', text: 'Mix-Ins: Amendments and What They Do' },
+      { type: 'table', headers: ['Amendment', 'Purpose', 'Typical Rate'], rows: [
+        ['Perlite', 'Aeration, prevents compaction, faster drainage', '20–40% of total volume'],
+        ['Vermiculite', 'Extra water retention, balances out perlite\'s fast drainage', '5–15% of total volume'],
+        ['Worm castings', 'Organic nutrient boost, beneficial microbial life', '10–20% of total volume'],
+        ['Mycorrhizal inoculant', 'Root colonization, improves nutrient/water uptake', 'Applied directly at the root zone at transplant'],
+        ['Dolomite lime', 'Slow-release Ca/Mg, mild pH buffering', '~1 tbsp per gallon of substrate'],
+        ['Silica', 'Cell wall strength, stress tolerance', 'Usually added to feed water rather than the mix'],
+        ['Biochar', 'Long-term microbial habitat, nutrient retention (charge/inoculate before use)', '5–10% of total volume'],
+        ['Bokashi or compost', 'Organic matter and slow-release nutrition for a "living coco" approach', '10–20% of total volume'],
+        ['Rice hulls', 'Cheap, reusable aeration alternative to perlite', '10–20% of total volume'],
+      ] },
+
+      { type: 'h2', text: 'Substrate Ratios by Approach' },
+      { type: 'ul', items: [
+        'Straight coco (100%): hand-water or drip fed, full nutrient solution every watering — best for growers who want precise control and don\'t mind feeding daily',
+        'Coco / Perlite (70/30 or 60/40): the most common commercial cannabis ratio — perlite prevents compaction over a long flower cycle and speeds drainage for fertigation runoff',
+        'Coco / Perlite / Vermiculite (60/20/20): balances perlite\'s fast drainage with vermiculite\'s extra retention — useful in dry climates or for growers who can\'t water multiple times a day',
+        '"Living coco" (coco / worm castings / dolomite lime / perlite): a semi-organic approach watered rather than fed a full synthetic line every time — closer to a soil-style schedule with coco\'s drainage',
+        'Coco as a starter plug: fine-sifted coco or plugs used only for germination/cloning, then transplanted into the final system',
+      ] },
+
+      { type: 'h2', text: 'Common Mistakes' },
+      { type: 'ul', items: [
+        'Skipping the buffer step — the #1 cause of early Cal-Mag deficiency symptoms in coco-grown cannabis',
+        'Not rinsing before buffering — wastes your Cal-Mag supplement and still leaves high EC',
+        'Judging "wet enough" by look alone — always confirm with an EC/pH meter rather than eyeballing it',
+        'Reusing coco without sterilizing and re-buffering — carries over pathogens and depleted exchange sites',
+        'Treating coco like soil — because it holds so little native nutrition, missed feedings show up as deficiencies far faster',
+        'Using cheap, unbranded bricks with no listed EC/CEC info — a cheap brick can cost you more time in prep than it saves in price',
+      ] },
+
+      { type: 'h2', text: 'Quick Reference Cheat Sheet' },
+      { type: 'table', headers: ['Step', 'Target'], rows: [
+        ['Water for 5 kg brick', '20–25 L'],
+        ['Expanded yield', '60–70 L'],
+        ['Rinse target EC', 'Below ~1.0 mS/cm'],
+        ['Buffer solution EC', '1.2–2.0 mS/cm'],
+        ['Buffer solution pH', '~6.2'],
+        ['Buffer soak time', '12–24 hrs (double-buffer for best results)'],
+        ['Final ready-to-use EC', 'Under ~0.5–0.8 mS/cm'],
+        ['Final ready-to-use pH', '5.8–6.2'],
+        ['Common perlite ratio', '20–40% of total volume'],
+      ] },
+
+      { type: 'p', text: 'Cover photo: hydrated coco coir fiber. Credit: D-Kuru / Wikimedia Commons (CC BY-SA 3.0).' },
+    ],
+  },
 ]
 
 export function getPost(slug) {
