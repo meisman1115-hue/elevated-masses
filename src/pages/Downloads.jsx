@@ -1,6 +1,5 @@
-import { PageHeader, StubNote } from '../components/ui.jsx'
-import { useAuth } from '../context/AuthContext.jsx'
-import { FileText, Download, Lock, FileArchive, ClipboardList, Ruler } from 'lucide-react'
+import { PageHeader } from '../components/ui.jsx'
+import { FileText, Download, FileArchive, ClipboardList, Ruler } from 'lucide-react'
 
 // Downloadable resources. Set `file` to a real path in /public (or a URL) when
 // the file is ready; until then the button shows "Coming soon".
@@ -14,40 +13,15 @@ const resources = [
 ]
 
 export default function Downloads() {
-  const { user, isConfigured, openAuthModal } = useAuth()
-  const signedIn = isConfigured && user
-
   return (
     <>
       <PageHeader
         eyebrow="Downloads"
         title="Blueprints & grow resources"
-        description="Free digital blueprints, guides and checklists. Create a free account to download — it also lets you post in the community forum."
-      >
-        {!signedIn && isConfigured && (
-          <button type="button" onClick={openAuthModal} className="btn-primary">
-            Sign in to download
-          </button>
-        )}
-      </PageHeader>
+        description="Free digital blueprints, guides and checklists — no account needed."
+      />
 
       <div className="container-em py-12">
-        {!isConfigured && (
-          <StubNote>
-            Downloads are open for now while the account system is being set up. Once Supabase is connected,
-            they become members-only (a free account, same one used to post in the forum).
-          </StubNote>
-        )}
-        {isConfigured && !user && (
-          <div className="flex items-start gap-3 rounded-xl border border-purple/30 bg-purple/5 px-4 py-3 text-sm text-purple-soft">
-            <Lock size={18} className="mt-0.5 shrink-0" />
-            <p>
-              <span className="font-600 text-fg">Members only:</span> sign in (or create a free account) to
-              download these resources.
-            </p>
-          </div>
-        )}
-
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {resources.map((r) => {
             const Icon = r.icon
@@ -68,19 +42,13 @@ export default function Downloads() {
                   <span>{r.size}</span>
                 </div>
 
-                {!available ? (
-                  <button type="button" disabled className="btn-ghost mt-5 w-full opacity-50">
-                    File coming soon
-                  </button>
-                ) : signedIn || !isConfigured ? (
-                  // Signed in, or accounts not set up yet → download is open.
+                {available ? (
                   <a href={r.file} download className="btn-primary mt-5 w-full">
                     <Download size={15} /> Download
                   </a>
                 ) : (
-                  // Accounts live but not signed in → gate behind sign-in.
-                  <button type="button" onClick={openAuthModal} className="btn-ghost mt-5 w-full">
-                    <Lock size={15} /> Sign in to download
+                  <button type="button" disabled className="btn-ghost mt-5 w-full opacity-50">
+                    File coming soon
                   </button>
                 )}
               </div>
