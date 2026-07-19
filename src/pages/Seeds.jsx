@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { PageHeader, StubNote } from '../components/ui.jsx'
-import { ExternalLink, Info, Leaf, Sun, Timer, Tag, Handshake } from 'lucide-react'
+import ContentBlocks from '../components/ContentBlocks.jsx'
+import { seedsGuideBlocks } from '../lib/seedsGuide.js'
+import { ExternalLink, Info, Leaf, Tag, Handshake } from 'lucide-react'
 
 const companies = [
   {
@@ -12,13 +14,6 @@ const companies = [
     promoCode: 'UROWN',
     promoText: '15% off your order',
   },
-]
-
-const strains = [
-  { name: 'Strain / Variety A', type: 'Autoflower', flower: '9–10 wks', yield: 'Medium' },
-  { name: 'Strain / Variety B', type: 'Photoperiod', flower: '8–9 wks', yield: 'High' },
-  { name: 'Strain / Variety C', type: 'Autoflower', flower: '10–11 wks', yield: 'Medium' },
-  { name: 'Strain / Variety D', type: 'Photoperiod', flower: '9 wks', yield: 'High' },
 ]
 
 export default function Seeds() {
@@ -101,30 +96,10 @@ export default function Seeds() {
           </div>
         </div>
 
-        {/* Strain table */}
-        <h2 className="mt-16 text-2xl font-700 text-fg">Variety guide</h2>
-        <p className="mt-2 text-muted">A quick-reference table — fill in real varieties as partners come on board.</p>
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
-          <table className="w-full min-w-[520px] text-left text-sm">
-            <thead className="bg-surface/70 text-xs uppercase tracking-wide text-muted">
-              <tr>
-                <th className="px-5 py-4 font-600">Variety</th>
-                <th className="px-5 py-4 font-600"><span className="flex items-center gap-1.5"><Leaf size={13} /> Type</span></th>
-                <th className="px-5 py-4 font-600"><span className="flex items-center gap-1.5"><Timer size={13} /> Flower time</span></th>
-                <th className="px-5 py-4 font-600"><span className="flex items-center gap-1.5"><Sun size={13} /> Yield</span></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {strains.map((s) => (
-                <tr key={s.name} className="transition-colors hover:bg-white/[0.03]">
-                  <td className="px-5 py-4 font-600 text-fg">{s.name}</td>
-                  <td className="px-5 py-4 text-muted">{s.type}</td>
-                  <td className="px-5 py-4 text-muted">{s.flower}</td>
-                  <td className="px-5 py-4 text-muted">{s.yield}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Variety guide */}
+        <h2 className="mt-16 text-2xl font-700 text-fg">Know your seeds</h2>
+        <div className="mt-2">
+          <ContentBlocks blocks={seedsGuideBlocks} />
         </div>
       </div>
     </>
