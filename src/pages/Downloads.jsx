@@ -7,9 +7,9 @@ const resources = [
   { icon: Ruler, title: 'RDWC 1-Pot Build Guide', desc: 'Parts list + step-by-step assembly for a single-site recirculating DWC system.', type: 'PDF', size: '2 pages', file: '/downloads/rdwc-1-pot-build.pdf', cat: 'Blueprints' },
   { icon: Ruler, title: 'RDWC 2-Pot Build Guide', desc: 'Two grow buckets on a shared control reservoir — full build walkthrough.', type: 'PDF', size: '2 pages', file: '/downloads/rdwc-2-pot-build.pdf', cat: 'Blueprints' },
   { icon: Ruler, title: 'RDWC 4-Pot Build Guide', desc: 'A four-bucket recirculating loop with sizing for pumps and air.', type: 'PDF', size: '2 pages', file: '/downloads/rdwc-4-pot-build.pdf', cat: 'Blueprints' },
-  { icon: ClipboardList, title: 'Nutrient Mixing Cheat Sheet', desc: 'Quick-reference EC/pH targets by growth stage.', type: 'PDF', size: '—', file: null, cat: 'Guides' },
-  { icon: ClipboardList, title: 'Weekly Grow Checklist', desc: 'A printable routine so nothing slips between feedings.', type: 'PDF', size: '—', file: null, cat: 'Guides' },
-  { icon: FileArchive, title: 'Beginner Starter Pack', desc: 'A bundle of the essentials to get your first grow going.', type: 'ZIP', size: '—', file: null, cat: 'Bundles' },
+  { icon: ClipboardList, title: 'Nutrient Mixing Cheat Sheet', desc: 'Quick-reference EC/pH targets by growth stage.', type: 'PDF', size: '1 page', file: '/downloads/nutrient-mixing-cheat-sheet.pdf', cat: 'Guides' },
+  { icon: ClipboardList, title: 'Weekly Grow Checklist', desc: 'A printable routine so nothing slips between feedings.', type: 'PDF', size: '1 page', file: '/downloads/weekly-grow-checklist.pdf', cat: 'Guides' },
+  { icon: FileArchive, title: 'Beginner Starter Pack', desc: 'A bundle of the essentials to get your first grow going.', type: 'ZIP', size: '4 files', file: '/downloads/beginner-starter-pack.zip', cat: 'Bundles' },
 ]
 
 export default function Downloads() {
