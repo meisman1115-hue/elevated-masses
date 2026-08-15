@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import {
-  ArrowRight, Sprout, FileText, Wrench, Users, ShoppingBag,
-  Leaf, MessageSquare, Calendar, ScanLine,
+  ArrowRight, Sprout, FileText, Wrench, ShoppingBag,
+  Leaf, BookOpen, Download, ScanLine,
 } from 'lucide-react'
 import { SectionHeading } from '../components/ui.jsx'
 import { LeafMotif } from '../components/illustrations.jsx'
@@ -12,13 +12,13 @@ const pillars = [
   { icon: FileText, title: 'Digital Blueprints', body: 'Downloadable hydroponic plans you can build at home — from a single bucket to a full vertical wall.' },
   { icon: Wrench, title: 'Build Guides', body: 'Step-by-step tutorials for DWC, NFT, ebb & flow and more, with parts lists and photos.' },
   { icon: ShoppingBag, title: 'Gear & Seeds', body: 'Hand-picked equipment and seed sources we actually trust, in one curated place.' },
-  { icon: Users, title: 'The Community', body: 'A network of urban growers swapping wins, fixes and harvest pics in the forum.' },
+  { icon: ScanLine, title: 'AI Plant Diagnosis', body: 'Snap a photo of a struggling plant and get likely causes and fixes in seconds.' },
 ]
 
 const quickLinks = [
   { icon: ScanLine, title: 'Plant AI', body: 'Snap a photo, get a diagnosis.', to: '/plant-ai', accent: true },
-  { icon: MessageSquare, title: 'Forum', body: 'Connect with growers.', to: '/forum' },
-  { icon: Calendar, title: 'Events', body: 'Blunts & Brushes and more.', to: '/events' },
+  { icon: BookOpen, title: 'Tutorials', body: 'Companion planting & more.', to: '/tutorials' },
+  { icon: Download, title: 'Downloads', body: 'Blueprints & build guides.', to: '/downloads' },
   { icon: Leaf, title: 'Seeds', body: 'Genetics worth growing.', to: '/seeds' },
 ]
 

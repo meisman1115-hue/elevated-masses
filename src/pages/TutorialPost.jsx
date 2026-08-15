@@ -65,7 +65,7 @@ export default function TutorialPost() {
 
         <div className="mt-12 rounded-2xl border border-green/25 bg-green/5 p-6 text-center">
           <p className="text-fg">Got a companion combo that works for you?</p>
-          <Link to="/forum" className="btn-primary mt-4">Share it in the forum <ArrowLeft size={16} className="rotate-180" /></Link>
+          <Link to="/contact" className="btn-primary mt-4">Send us your combo <ArrowLeft size={16} className="rotate-180" /></Link>
         </div>
       </div>
     </article>

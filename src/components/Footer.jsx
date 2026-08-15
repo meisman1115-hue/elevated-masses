@@ -15,10 +15,8 @@ const columns = [
     ],
   },
   {
-    title: 'Community',
+    title: 'Grow',
     links: [
-      { label: 'Forum', to: '/forum' },
-      { label: 'Events', to: '/events' },
       { label: 'Gear', to: '/gear' },
       { label: 'Seeds', to: '/seeds' },
       { label: 'About', to: '/about' },

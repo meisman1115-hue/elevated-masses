@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom'
 import { PageHeader, StubNote } from '../components/ui.jsx'
-import { Mail, MessageSquare, Instagram, Send } from 'lucide-react'
+import { Mail, Instagram, Send } from 'lucide-react'
 import { TikTokIcon } from '../components/icons.jsx'
 
 const contactChannels = [
   { icon: Mail, title: 'Email', value: 'info@elevatedmasses.com', note: 'Best way to reach us', href: 'mailto:info@elevatedmasses.com' },
   { icon: Instagram, title: 'Instagram', value: '@mrgrowurown', note: 'Follow along', href: 'https://www.instagram.com/mrgrowurown/' },
   { icon: TikTokIcon, title: 'TikTok', value: '@elevatedmasses', note: 'Follow along', href: 'https://www.tiktok.com/@elevatedmasses' },
-  { icon: MessageSquare, title: 'Forum', value: 'Ask the community', note: 'Public discussion', href: '/forum' },
 ]
 
 export default function Contact() {

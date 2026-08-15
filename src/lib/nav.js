@@ -20,13 +20,9 @@ export const navGroups = [
       { label: 'Downloads', to: '/downloads', desc: 'Blueprints & guides' },
     ],
   },
-  {
-    label: 'Community',
-    links: [
-      { label: 'Forum', to: '/forum', desc: 'Connect with growers' },
-      { label: 'Events', to: '/events', desc: 'Meetups & workshops' },
-    ],
-  },
+  // Community (Forum, Events) is hidden from nav until real user accounts
+  // exist — the pages themselves still work at /forum and /events, just
+  // not linked from navigation. Re-add here when ready to launch it.
 ]
 
 // Standalone top-level links (no dropdown).
