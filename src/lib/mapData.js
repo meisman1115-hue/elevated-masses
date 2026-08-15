@@ -14,11 +14,10 @@ async function loadGeoJSON(path) {
 // Note: this used to also merge in a `lakes.min.geojson` layer (built by
 // scripts/prepare-lakes-data.mjs) so major landlocked lakes/seas picked up
 // their surrounding jurisdiction's color instead of showing plain "ocean".
-// Reverted — the extra ~54 polygons it added pushed the globe's polygon
-// count past whatever threshold triggers a recurring react-globe.gl
-// rendering-corruption bug (whole globe turns solid-color and the hover
-// tooltip gets stuck on one place). The data/script are still in the repo
-// if this is ever worth revisiting with a fix or a different map library.
+// Reverted after it aggravated a rendering-corruption bug in the old 3D
+// globe (react-globe.gl) — no longer relevant now that the map is a flat
+// SVG projection, but re-adding it wasn't asked for, so the data/script
+// just sit unused in the repo if it's ever worth revisiting.
 export async function loadMapPolygons() {
   const [world, us, ca] = await Promise.all([
     loadGeoJSON('/data/world-countries.min.geojson'),
@@ -26,10 +25,15 @@ export async function loadMapPolygons() {
     loadGeoJSON('/data/canada-provinces.min.geojson'),
   ])
 
-  const worldFeatures = world.features.map((f) => {
-    const law = countryLaws[f.properties.iso3] ?? DEFAULT_COUNTRY_STATUS(f.properties.name)
-    return { ...f, properties: { ...f.properties, kind: 'country', ...law } }
-  })
+  // Antarctica has no meaningful cannabis-law status and its geometry
+  // approaches -90° latitude, which breaks a Mercator projection's fitSize
+  // (Mercator's y-coordinate diverges toward the poles).
+  const worldFeatures = world.features
+    .filter((f) => f.properties.iso3 !== 'ATA')
+    .map((f) => {
+      const law = countryLaws[f.properties.iso3] ?? DEFAULT_COUNTRY_STATUS(f.properties.name)
+      return { ...f, properties: { ...f.properties, kind: 'country', ...law } }
+    })
 
   const usFeatures = us.features.map((f) => {
     const law = usStateLaws[f.properties.name] ?? DEFAULT_COUNTRY_STATUS(f.properties.name)

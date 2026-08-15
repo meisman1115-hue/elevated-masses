@@ -1,49 +1,32 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
-import * as THREE from 'three'
-import Globe from 'react-globe.gl'
+import { useEffect, useRef, useState, useMemo } from 'react'
+import { geoMercator, geoPath } from 'd3-geo'
 import { loadMapPolygons } from '../lib/mapData.js'
 import { STATUS, LAST_UPDATED } from '../lib/cannabisLaws.js'
 import LawPopup from '../components/LawPopup.jsx'
 import { PageHeader } from '../components/ui.jsx'
-import { Loader2, Info, Play, Pause, RotateCcw } from 'lucide-react'
+import { Loader2, Info } from 'lucide-react'
 
-const prefersReducedMotion =
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-function capColor(feature, isHovered) {
+function fillColor(feature, isHovered) {
   const legal = feature.properties.status === STATUS.LEGAL
   const [r, g, b] = legal ? [139, 255, 60] : [239, 68, 68]
-  return `rgba(${r},${g},${b},${isHovered ? 0.92 : 0.55})`
+  return `rgba(${r},${g},${b},${isHovered ? 0.85 : 0.55})`
 }
 function strokeColor(feature) {
   return feature.properties.status === STATUS.LEGAL ? '#8BFF3C' : '#ef4444'
 }
 
+// A flat Mercator SVG map — simpler and far more robust than the interactive
+// 3D globe (react-globe.gl) this replaced, which had a recurring
+// rendering-corruption bug on hover that several rounds of fixes couldn't
+// fully resolve. No pan/zoom/rotation here on purpose — click a region for
+// details, that's the whole interaction.
 export default function CannabisMap() {
-  const globeRef = useRef()
   const containerRef = useRef()
-  const resumeTimer = useRef(null)
-  const lastHoverUpdate = useRef(0)
-
   const [polygons, setPolygons] = useState([])
   const [loadState, setLoadState] = useState('loading') // loading | ready | error
   const [selected, setSelected] = useState(null)
   const [hovered, setHovered] = useState(null)
-  const [autoRotate, setAutoRotate] = useState(!prefersReducedMotion)
-  const [size, setSize] = useState({ width: 320, height: 420 })
-
-  // Elevated Masses ultraviolet purple for the globe's "water" surface —
-  // land is fully covered by the country/state/province polygon overlays.
-  const globeMaterial = useMemo(
-    () =>
-      new THREE.MeshPhongMaterial({
-        color: new THREE.Color('#5b1fa8'),
-        emissive: new THREE.Color('#3a0f75'),
-        emissiveIntensity: 0.35,
-        shininess: 12,
-      }),
-    [],
-  )
+  const [width, setWidth] = useState(320)
 
   useEffect(() => {
     let active = true
@@ -61,82 +44,29 @@ export default function CannabisMap() {
   }, [])
 
   useEffect(() => {
-    function updateSize() {
-      if (!containerRef.current) return
-      const w = containerRef.current.clientWidth
-      setSize({ width: w, height: Math.max(420, Math.min(w * 0.72, window.innerHeight * 0.72)) })
+    function updateWidth() {
+      if (containerRef.current) setWidth(containerRef.current.clientWidth)
     }
-    updateSize()
-    window.addEventListener('resize', updateSize)
-    return () => window.removeEventListener('resize', updateSize)
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+    return () => window.removeEventListener('resize', updateWidth)
   }, [])
 
-  // Keep the OrbitControls' autoRotate flag in sync with our toggle state.
-  useEffect(() => {
-    const controls = globeRef.current?.controls()
-    if (controls) controls.autoRotate = autoRotate
-  }, [autoRotate, loadState])
+  const height = Math.round(width * 0.52)
 
-  function handleGlobeReady() {
-    const controls = globeRef.current?.controls()
-    if (controls) {
-      controls.autoRotate = autoRotate
-      controls.autoRotateSpeed = 0.45
-      controls.enableDamping = true
-    }
-    globeRef.current?.pointOfView({ lat: 25, lng: -40, altitude: 2.3 }, 0)
-  }
-
-  // Memoized so these only get new identities when `hovered` actually
-  // changes (now throttled above), instead of on every unrelated re-render.
-  const getCapColor = useCallback((d) => capColor(d, d === hovered), [hovered])
-  const getAltitude = useCallback((d) => (d === hovered ? 0.05 : 0.01), [hovered])
-  const getSideColor = useCallback(() => 'rgba(15,17,20,0.35)', [])
-  const getLabel = useCallback(
-    (d) =>
-      `<div style="font-family:Inter,sans-serif;padding:5px 10px;background:#10131A;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#EAF3E4;font-size:12px;">${d.properties.name}</div>`,
-    [],
-  )
-
-  // While auto-rotating with the cursor held still, the raycaster hits a
-  // *different* polygon on nearly every animation frame. Throttling those
-  // updates (a few per second instead of ~60/sec) reduced but didn't
-  // eliminate a whole-globe render corruption bug — it can still recur with
-  // enough polygons on the globe. Since "hovering" a spot the mouse isn't
-  // intentionally over (the globe is moving, not the cursor) was never a
-  // meaningful interaction anyway, we just ignore hover entirely while
-  // auto-rotate is actually running (checked live off the controls object,
-  // since that also reflects the temporary pause during drag/zoom below —
-  // the `autoRotate` state only reflects the user's on/off toggle). Hover
-  // highlighting comes back the moment rotation stops.
-  const handlePolygonHover = useCallback((d) => {
-    if (globeRef.current?.controls()?.autoRotate) return
-    const now = performance.now()
-    if (now - lastHoverUpdate.current < 120) return
-    lastHoverUpdate.current = now
-    setHovered(d)
-  }, [])
-
-  // Pause auto-rotate while the user is actively dragging/zooming, then
-  // resume after a few seconds of inactivity — keeps it feeling alive
-  // without fighting the user's own rotation.
-  const handleInteractionStart = useCallback(() => {
-    if (prefersReducedMotion || !autoRotate) return
-    const controls = globeRef.current?.controls()
-    if (!controls) return
-    controls.autoRotate = false
-    if (resumeTimer.current) clearTimeout(resumeTimer.current)
-    resumeTimer.current = setTimeout(() => {
-      if (controls) controls.autoRotate = true
-    }, 5000)
-  }, [autoRotate])
+  const pathGenerator = useMemo(() => {
+    if (!polygons.length || !width) return null
+    const featureCollection = { type: 'FeatureCollection', features: polygons }
+    const projection = geoMercator().fitSize([width, height], featureCollection)
+    return geoPath(projection)
+  }, [polygons, width, height])
 
   return (
     <>
       <PageHeader
         eyebrow="Legal Map"
         title="Where can you legally grow?"
-        description="Drag to rotate the globe, scroll to zoom. Neon green regions allow home cannabis cultivation; red regions don't. Click any region for details."
+        description="Neon green regions allow home cannabis cultivation; red regions don't. Click any region for details."
       />
 
       <div className="container-em py-12">
@@ -150,70 +80,48 @@ export default function CannabisMap() {
           </p>
         </div>
 
-        {/* Legend + controls */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-5 text-sm text-muted">
-            <span className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-green shadow-glow-green" /> Legal to grow at home
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-red-500" /> Not legal
-            </span>
-          </div>
-          <div className="flex gap-2">
-            <button type="button" onClick={() => setAutoRotate((v) => !v)} className="btn-ghost !py-2 !px-4 text-xs">
-              {autoRotate ? <Pause size={14} /> : <Play size={14} />}
-              {autoRotate ? 'Pause rotation' : 'Resume rotation'}
-            </button>
-            <button
-              type="button"
-              onClick={() => globeRef.current?.pointOfView({ lat: 25, lng: -40, altitude: 2.3 }, 800)}
-              className="btn-ghost !py-2 !px-4 text-xs"
-            >
-              <RotateCcw size={14} /> Reset view
-            </button>
-          </div>
+        {/* Legend */}
+        <div className="mt-6 flex flex-wrap gap-5 text-sm text-muted">
+          <span className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-green shadow-glow-green" /> Legal to grow at home
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-red-500" /> Not legal
+          </span>
         </div>
 
         <div
           ref={containerRef}
-          className="relative mt-6 overflow-hidden rounded-3xl border border-white/10 bg-surface/30"
-          onPointerDown={handleInteractionStart}
-          onWheel={handleInteractionStart}
+          className="relative mt-6 overflow-hidden rounded-3xl border border-white/10 bg-[#12081f]"
         >
           {loadState === 'loading' && (
-            <div className="flex h-[420px] items-center justify-center gap-2 text-muted">
+            <div className="flex h-[320px] items-center justify-center gap-2 text-muted">
               <Loader2 className="animate-spin" size={20} /> Loading map data…
             </div>
           )}
           {loadState === 'error' && (
-            <div className="flex h-[420px] items-center justify-center text-muted">
+            <div className="flex h-[320px] items-center justify-center text-muted">
               Couldn't load map data — refresh to try again.
             </div>
           )}
-          {loadState === 'ready' && (
-            <Globe
-              ref={globeRef}
-              width={size.width}
-              height={size.height}
-              backgroundColor="rgba(0,0,0,0)"
-              globeMaterial={globeMaterial}
-              showAtmosphere
-              atmosphereColor="#8BFF3C"
-              atmosphereAltitude={0.18}
-              showGraticules
-              polygonsData={polygons}
-              polygonGeoJsonGeometry="geometry"
-              polygonCapColor={getCapColor}
-              polygonSideColor={getSideColor}
-              polygonStrokeColor={strokeColor}
-              polygonAltitude={getAltitude}
-              polygonLabel={getLabel}
-              polygonsTransitionDuration={200}
-              onPolygonHover={handlePolygonHover}
-              onPolygonClick={setSelected}
-              onGlobeReady={handleGlobeReady}
-            />
+          {loadState === 'ready' && pathGenerator && (
+            <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label="World map of cannabis home-cultivation legality">
+              {polygons.map((feature, i) => (
+                <path
+                  key={`${feature.properties.kind}-${feature.properties.name}-${i}`}
+                  d={pathGenerator(feature)}
+                  fill={fillColor(feature, feature === hovered)}
+                  stroke={strokeColor(feature)}
+                  strokeWidth={feature === hovered ? 1.3 : 0.6}
+                  className="cursor-pointer transition-colors"
+                  onMouseEnter={() => setHovered(feature)}
+                  onMouseLeave={() => setHovered((h) => (h === feature ? null : h))}
+                  onClick={() => setSelected(feature)}
+                >
+                  <title>{feature.properties.name}</title>
+                </path>
+              ))}
+            </svg>
           )}
         </div>
 

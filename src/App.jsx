@@ -21,7 +21,7 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import NotFound from './pages/NotFound.jsx'
 
-// Lazy-loaded: react-globe.gl bundles three.js and is only needed on this page.
+// Lazy-loaded since the map data (GeoJSON boundaries) is only needed here.
 const CannabisMap = lazy(() => import('./pages/CannabisMap.jsx'))
 
 function MapFallback() {
