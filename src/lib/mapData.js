@@ -11,6 +11,38 @@ async function loadGeoJSON(path) {
   return res.json()
 }
 
+// A ring whose points all share the same longitude or latitude has zero
+// area — geometrically degenerate. Both Virginia and Maryland's source data
+// carry one of these (a barrier-island sliver simplified down to a flat
+// line), and feeding it into d3-geo's path/clip pipeline produces a
+// full-canvas rectangle artifact instead of just silently doing nothing.
+// Stripping these out before rendering sidesteps that entirely.
+function ringIsDegenerate(ring) {
+  let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity
+  for (const [lon, lat] of ring) {
+    if (lon < minLon) minLon = lon
+    if (lon > maxLon) maxLon = lon
+    if (lat < minLat) minLat = lat
+    if (lat > maxLat) maxLat = lat
+  }
+  return minLon === maxLon || minLat === maxLat
+}
+
+function sanitizeGeometry(geometry) {
+  if (geometry.type === 'Polygon') {
+    return { ...geometry, coordinates: geometry.coordinates.filter((ring) => !ringIsDegenerate(ring)) }
+  }
+  if (geometry.type === 'MultiPolygon') {
+    return {
+      ...geometry,
+      coordinates: geometry.coordinates
+        .map((rings) => rings.filter((ring) => !ringIsDegenerate(ring)))
+        .filter((rings) => rings.length > 0),
+    }
+  }
+  return geometry
+}
+
 // Note: this used to also merge in a `lakes.min.geojson` layer (built by
 // scripts/prepare-lakes-data.mjs) so major landlocked lakes/seas picked up
 // their surrounding jurisdiction's color instead of showing plain "ocean".
@@ -32,17 +64,17 @@ export async function loadMapPolygons() {
     .filter((f) => f.properties.iso3 !== 'ATA')
     .map((f) => {
       const law = countryLaws[f.properties.iso3] ?? DEFAULT_COUNTRY_STATUS(f.properties.name)
-      return { ...f, properties: { ...f.properties, kind: 'country', ...law } }
+      return { ...f, geometry: sanitizeGeometry(f.geometry), properties: { ...f.properties, kind: 'country', ...law } }
     })
 
   const usFeatures = us.features.map((f) => {
     const law = usStateLaws[f.properties.name] ?? DEFAULT_COUNTRY_STATUS(f.properties.name)
-    return { ...f, properties: { ...f.properties, kind: 'us-state', ...law } }
+    return { ...f, geometry: sanitizeGeometry(f.geometry), properties: { ...f.properties, kind: 'us-state', ...law } }
   })
 
   const caFeatures = ca.features.map((f) => {
     const law = canadaProvinceLaws[f.properties.name] ?? DEFAULT_COUNTRY_STATUS(f.properties.name)
-    return { ...f, properties: { ...f.properties, kind: 'ca-province', ...law } }
+    return { ...f, geometry: sanitizeGeometry(f.geometry), properties: { ...f.properties, kind: 'ca-province', ...law } }
   })
 
   return [...worldFeatures, ...usFeatures, ...caFeatures]

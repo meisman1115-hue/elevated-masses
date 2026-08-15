@@ -54,11 +54,26 @@ export default function CannabisMap() {
 
   const height = Math.round(width * 0.52)
 
-  const pathGenerator = useMemo(() => {
-    if (!polygons.length || !width) return null
+  const { pathGenerator, stretchTransform } = useMemo(() => {
+    if (!polygons.length || !width) return { pathGenerator: null, stretchTransform: '' }
     const featureCollection = { type: 'FeatureCollection', features: polygons }
     const projection = geoMercator().fitSize([width, height], featureCollection)
-    return geoPath(projection)
+    // Bounded rectangular clip — good practice for a non-global map view,
+    // separate from the degenerate-ring fix in mapData.js (sanitizeGeometry).
+    projection.clipExtent([[0, 0], [width, height]])
+    const generator = geoPath(projection)
+
+    // fitSize preserves the projection's true aspect ratio, which can leave
+    // empty margins inside [width, height] since the data's natural extent
+    // rarely matches the box exactly. Stretching non-uniformly to fill the
+    // box edge-to-edge trades a little shape accuracy for a map that always
+    // fills its container, which is what was asked for here.
+    const [[x0, y0], [x1, y1]] = generator.bounds(featureCollection)
+    const scaleX = x1 > x0 ? width / (x1 - x0) : 1
+    const scaleY = y1 > y0 ? height / (y1 - y0) : 1
+    const transform = `scale(${scaleX},${scaleY}) translate(${-x0},${-y0})`
+
+    return { pathGenerator: generator, stretchTransform: transform }
   }, [polygons, width, height])
 
   return (
@@ -106,21 +121,24 @@ export default function CannabisMap() {
           )}
           {loadState === 'ready' && pathGenerator && (
             <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label="World map of cannabis home-cultivation legality">
-              {polygons.map((feature, i) => (
-                <path
-                  key={`${feature.properties.kind}-${feature.properties.name}-${i}`}
-                  d={pathGenerator(feature)}
-                  fill={fillColor(feature, feature === hovered)}
-                  stroke={strokeColor(feature)}
-                  strokeWidth={feature === hovered ? 1.3 : 0.6}
-                  className="cursor-pointer transition-colors"
-                  onMouseEnter={() => setHovered(feature)}
-                  onMouseLeave={() => setHovered((h) => (h === feature ? null : h))}
-                  onClick={() => setSelected(feature)}
-                >
-                  <title>{feature.properties.name}</title>
-                </path>
-              ))}
+              <g transform={stretchTransform}>
+                {polygons.map((feature, i) => (
+                  <path
+                    key={`${feature.properties.kind}-${feature.properties.name}-${i}`}
+                    d={pathGenerator(feature)}
+                    fill={fillColor(feature, feature === hovered)}
+                    stroke={strokeColor(feature)}
+                    strokeWidth={feature === hovered ? 1.3 : 0.6}
+                    vectorEffect="non-scaling-stroke"
+                    className="cursor-pointer transition-colors"
+                    onMouseEnter={() => setHovered(feature)}
+                    onMouseLeave={() => setHovered((h) => (h === feature ? null : h))}
+                    onClick={() => setSelected(feature)}
+                  >
+                    <title>{feature.properties.name}</title>
+                  </path>
+                ))}
+              </g>
             </svg>
           )}
         </div>
