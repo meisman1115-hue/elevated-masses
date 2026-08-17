@@ -57,18 +57,6 @@ export default function Home() {
               </Link>
               <Link to="/blog" className="btn-ghost">Read the blog</Link>
             </div>
-            <dl className="mt-12 grid max-w-md grid-cols-3 gap-6">
-              {[
-                ['30+', 'Build guides'],
-                ['1.2k', 'Growers'],
-                ['Weekly', 'New drops'],
-              ].map(([n, l]) => (
-                <div key={l}>
-                  <dt className="font-display text-2xl font-700 text-green">{n}</dt>
-                  <dd className="mt-1 text-xs uppercase tracking-wide text-muted">{l}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
           <div className="animate-fade-up [animation-delay:120ms]">
