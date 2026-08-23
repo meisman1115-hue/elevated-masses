@@ -13,6 +13,7 @@ const resources = [
   { icon: Box, title: '1/4 inch (Drip_ring_quarterinch)', desc: '3D-printable drip ring for 1/4" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-4-inch.stl', cat: '3D Prints' },
   { icon: Box, title: '3/8 inch (Drip_Ring_ThreeEighths)', desc: '3D-printable drip ring for 3/8" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-3-8-inch.stl', cat: '3D Prints' },
   { icon: Box, title: '1/2 inch (Drip_Ring_HalfInch)', desc: '3D-printable drip ring for 1/2" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-2-inch.stl', cat: '3D Prints' },
+  { icon: FileArchive, title: 'Doobie & Bic Lighter Case', desc: '3D-printable case with sealing ring — includes both STL files.', type: 'ZIP', size: '2 files', file: '/downloads/doobie-bic-lighter-case.zip', cat: '3D Prints' },
 ]
 
 export default function Downloads() {
