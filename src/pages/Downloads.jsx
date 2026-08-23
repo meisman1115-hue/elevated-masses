@@ -1,5 +1,5 @@
 import { PageHeader } from '../components/ui.jsx'
-import { FileText, Download, FileArchive, ClipboardList, Ruler } from 'lucide-react'
+import { FileText, Download, FileArchive, ClipboardList, Ruler, Box } from 'lucide-react'
 
 // Downloadable resources. Set `file` to a real path in /public (or a URL) when
 // the file is ready; until then the button shows "Coming soon".
@@ -10,6 +10,9 @@ const resources = [
   { icon: ClipboardList, title: 'Nutrient Mixing Cheat Sheet', desc: 'Quick-reference EC/pH targets by growth stage.', type: 'PDF', size: '1 page', file: '/downloads/nutrient-mixing-cheat-sheet.pdf', cat: 'Guides' },
   { icon: ClipboardList, title: 'Weekly Grow Checklist', desc: 'A printable routine so nothing slips between feedings.', type: 'PDF', size: '1 page', file: '/downloads/weekly-grow-checklist.pdf', cat: 'Guides' },
   { icon: FileArchive, title: 'Beginner Starter Pack', desc: 'A bundle of the essentials to get your first grow going.', type: 'ZIP', size: '4 files', file: '/downloads/beginner-starter-pack.zip', cat: 'Bundles' },
+  { icon: Box, title: '1/4 inch (Drip_ring_quarterinch)', desc: '3D-printable drip ring for 1/4" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-4-inch.stl', cat: '3D Prints' },
+  { icon: Box, title: '3/8 inch (Drip_Ring_ThreeEigths)', desc: '3D-printable drip ring for 3/8" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-3-8-inch.stl', cat: '3D Prints' },
+  { icon: Box, title: '1/2 inch (Drip_Ring_HalfInch)', desc: '3D-printable drip ring for 1/2" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-2-inch.stl', cat: '3D Prints' },
 ]
 
 export default function Downloads() {
