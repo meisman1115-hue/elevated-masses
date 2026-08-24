@@ -10,9 +10,9 @@ const resources = [
   { icon: ClipboardList, title: 'Nutrient Mixing Cheat Sheet', desc: 'Quick-reference EC/pH targets by growth stage.', type: 'PDF', size: '1 page', file: '/downloads/nutrient-mixing-cheat-sheet.pdf', cat: 'Guides' },
   { icon: ClipboardList, title: 'Weekly Grow Checklist', desc: 'A printable routine so nothing slips between feedings.', type: 'PDF', size: '1 page', file: '/downloads/weekly-grow-checklist.pdf', cat: 'Guides' },
   { icon: FileArchive, title: 'Beginner Starter Pack', desc: 'A bundle of the essentials to get your first grow going.', type: 'ZIP', size: '4 files', file: '/downloads/beginner-starter-pack.zip', cat: 'Bundles' },
-  { icon: Box, title: '1/4 inch (Drip_ring_quarterinch)', desc: '3D-printable drip ring for 1/4" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-4-inch.stl', cat: '3D Prints' },
-  { icon: Box, title: '3/8 inch (Drip_Ring_ThreeEighths)', desc: '3D-printable drip ring for 3/8" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-3-8-inch.stl', cat: '3D Prints' },
-  { icon: Box, title: '1/2 inch (Drip_Ring_HalfInch)', desc: '3D-printable drip ring for 1/2" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-2-inch.stl', cat: '3D Prints' },
+  { icon: Box, photo: '/downloads/drip-ring.jpg', title: '1/4 inch (Drip_ring_quarterinch)', desc: '3D-printable drip ring for 1/4" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-4-inch.stl', cat: '3D Prints' },
+  { icon: Box, photo: '/downloads/drip-ring.jpg', title: '3/8 inch (Drip_Ring_ThreeEighths)', desc: '3D-printable drip ring for 3/8" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-3-8-inch.stl', cat: '3D Prints' },
+  { icon: Box, photo: '/downloads/drip-ring.jpg', title: '1/2 inch (Drip_Ring_HalfInch)', desc: '3D-printable drip ring for 1/2" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-2-inch.stl', cat: '3D Prints' },
   { icon: FileArchive, title: 'Doobie & Bic Lighter Case', desc: '3D-printable case with sealing ring — includes both STL files.', type: 'ZIP', size: '2 files', file: '/downloads/doobie-bic-lighter-case.zip', cat: '3D Prints' },
 ]
 
@@ -31,30 +31,35 @@ export default function Downloads() {
             const Icon = r.icon
             const available = Boolean(r.file)
             return (
-              <div key={r.title} className="card flex flex-col p-6">
-                <div className="flex items-start justify-between">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-green/10 text-green">
-                    <Icon size={20} />
-                  </span>
-                  <span className="chip">{r.cat}</span>
-                </div>
-                <h3 className="mt-4 text-lg font-600 text-fg">{r.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{r.desc}</p>
-                <div className="mt-4 flex items-center gap-3 text-xs text-muted">
-                  <span className="flex items-center gap-1.5"><FileText size={12} /> {r.type}</span>
-                  <span>·</span>
-                  <span>{r.size}</span>
-                </div>
-
-                {available ? (
-                  <a href={r.file} download className="btn-primary mt-5 w-full">
-                    <Download size={15} /> Download
-                  </a>
-                ) : (
-                  <button type="button" disabled className="btn-ghost mt-5 w-full opacity-50">
-                    File coming soon
-                  </button>
+              <div key={r.title} className="card flex flex-col overflow-hidden">
+                {r.photo && (
+                  <img src={r.photo} alt={r.title} className="aspect-[16/10] w-full border-b border-white/10 object-cover" />
                 )}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-start justify-between">
+                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-green/10 text-green">
+                      <Icon size={20} />
+                    </span>
+                    <span className="chip">{r.cat}</span>
+                  </div>
+                  <h3 className="mt-4 text-lg font-600 text-fg">{r.title}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{r.desc}</p>
+                  <div className="mt-4 flex items-center gap-3 text-xs text-muted">
+                    <span className="flex items-center gap-1.5"><FileText size={12} /> {r.type}</span>
+                    <span>·</span>
+                    <span>{r.size}</span>
+                  </div>
+
+                  {available ? (
+                    <a href={r.file} download className="btn-primary mt-5 w-full">
+                      <Download size={15} /> Download
+                    </a>
+                  ) : (
+                    <button type="button" disabled className="btn-ghost mt-5 w-full opacity-50">
+                      File coming soon
+                    </button>
+                  )}
+                </div>
               </div>
             )
           })}
