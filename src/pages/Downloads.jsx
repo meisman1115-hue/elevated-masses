@@ -1,4 +1,5 @@
 import { PageHeader } from '../components/ui.jsx'
+import RotatingThumbnail from '../components/RotatingThumbnail.jsx'
 import { FileText, Download, FileArchive, ClipboardList, Ruler, Box } from 'lucide-react'
 
 // Downloadable resources. Set `file` to a real path in /public (or a URL) when
@@ -13,7 +14,7 @@ const resources = [
   { icon: Box, photo: '/downloads/drip-ring.jpg', title: '1/4 inch (Drip_ring_quarterinch)', desc: '3D-printable drip ring for 1/4" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-4-inch.stl', cat: '3D Prints' },
   { icon: Box, photo: '/downloads/drip-ring.jpg', title: '3/8 inch (Drip_Ring_ThreeEighths)', desc: '3D-printable drip ring for 3/8" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-3-8-inch.stl', cat: '3D Prints' },
   { icon: Box, photo: '/downloads/drip-ring.jpg', title: '1/2 inch (Drip_Ring_HalfInch)', desc: '3D-printable drip ring for 1/2" drip tubing.', type: 'STL', size: '3.1 MB', file: '/downloads/drip-ring-1-2-inch.stl', cat: '3D Prints' },
-  { icon: FileArchive, title: 'Doobie & Bic Lighter Case', desc: '3D-printable case with sealing ring — includes both STL files.', type: 'ZIP', size: '2 files', file: '/downloads/doobie-bic-lighter-case.zip', cat: '3D Prints' },
+  { icon: FileArchive, photos: ['/downloads/doobie-1.jpg', '/downloads/doobie-2.jpg'], title: 'Doobie & Bic Lighter Case', desc: '3D-printable case with sealing ring — includes both STL files.', type: 'ZIP', size: '2 files', file: '/downloads/doobie-bic-lighter-case.zip', cat: '3D Prints' },
 ]
 
 export default function Downloads() {
@@ -32,9 +33,13 @@ export default function Downloads() {
             const available = Boolean(r.file)
             return (
               <div key={r.title} className="card flex flex-col overflow-hidden">
-                {r.photo && (
+                {r.photos ? (
+                  <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10">
+                    <RotatingThumbnail photos={r.photos} alt={r.title} className="absolute inset-0 h-full w-full object-cover" />
+                  </div>
+                ) : r.photo ? (
                   <img src={r.photo} alt={r.title} className="aspect-[16/10] w-full border-b border-white/10 object-cover" />
-                )}
+                ) : null}
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-start justify-between">
                     <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-green/10 text-green">
