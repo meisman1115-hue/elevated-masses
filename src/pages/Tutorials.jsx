@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PageHeader, StubNote } from '../components/ui.jsx'
+import { PageHeader } from '../components/ui.jsx'
 import { Clock, ArrowRight, GraduationCap } from 'lucide-react'
 import { tutorials } from '../lib/tutorials.js'
 
@@ -13,11 +13,6 @@ export default function Tutorials() {
       />
 
       <div className="container-em py-12">
-        <StubNote>
-          Kicking off with companion planting. More tutorial tracks can be added by editing
-          <code className="text-green"> src/lib/tutorials.js</code>.
-        </StubNote>
-
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {tutorials.map((t) => (
             <Link key={t.slug} to={`/tutorials/${t.slug}`} className="card-hover flex flex-col overflow-hidden">

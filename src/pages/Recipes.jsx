@@ -14,7 +14,6 @@ export default function Recipes() {
 
       <div className="container-em py-12">
         <StubNote>
-          A starter set of recipes — add your own by editing <code className="text-green">src/lib/recipes.js</code>.
           Infused recipes include dosing reminders; grow and consume responsibly and legally.
         </StubNote>
 
