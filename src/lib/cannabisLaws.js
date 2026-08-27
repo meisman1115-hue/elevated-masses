@@ -18,7 +18,7 @@
 // 'legal' or 'illegal'. Legal entries should fill `homeGrow` + `possession`;
 // illegal entries should fill `penalty`. `note` is optional extra nuance.
 
-export const LAST_UPDATED = '2026-07-13'
+export const LAST_UPDATED = '2026-08-27'
 
 export const STATUS = { LEGAL: 'legal', ILLEGAL: 'illegal' }
 
@@ -66,7 +66,7 @@ export const usStateLaws = {
   Kentucky: r('A limited medical program exists, but home cultivation is not permitted even for registered patients. Unlicensed cultivation is a criminal offense.'),
   Louisiana: r('Recreational cultivation is illegal; medical patients cannot grow at home. Cultivation is a felony offense.'),
   Mississippi: r('Recreational cultivation is illegal; medical patients cannot grow at home. Cultivation is a felony offense.'),
-  Nebraska: r('A narrow medical program was recently established with no home-grow allowance; recreational cultivation remains illegal.'),
+  Nebraska: r('A narrow voter-approved (Nov 2024) medical program began issuing dispensary licenses in early 2026, but it does not allow home cultivation. Recreational cultivation remains illegal.'),
   'New Hampshire': r('Possession of small amounts is decriminalized to a civil fine, but cultivation remains a criminal offense, including for medical patients.'),
   'North Carolina': r('Cannabis is illegal with no comprehensive medical program. Cultivation is a felony offense.'),
   'North Dakota': r('Recreational cultivation is illegal; medical patients cannot grow at home.'),
@@ -75,7 +75,7 @@ export const usStateLaws = {
   'South Carolina': r('Cannabis is fully illegal with no medical or recreational program. Cultivation is a felony offense.'),
   'South Dakota': r('A medical program exists, but it does not allow home cultivation. Recreational cultivation is illegal.'),
   Tennessee: r('Cannabis is illegal outside a very limited low-THC CBD oil law. Cultivation is a felony offense.'),
-  Texas: r('Cannabis is illegal outside a very limited low-THC program. Cultivation is a felony offense.'),
+  Texas: r('Cannabis is illegal outside a limited medical program (expanded in 2025 to cover more qualifying conditions, incl. chronic pain and PTSD). Only state-licensed dispensing organizations may cultivate — home cultivation is not permitted, even for registered patients. Unlicensed cultivation is a felony offense.'),
   Utah: r('A medical program exists, but home cultivation is not permitted for patients. Recreational cultivation is illegal.'),
   'West Virginia': r('A medical program exists, but home cultivation is not permitted for patients. Recreational cultivation is illegal.'),
   Wisconsin: r('Cannabis is fully illegal with no medical or recreational program. Cultivation is a felony offense.'),
@@ -116,12 +116,12 @@ export const countryLaws = {
   GEO: g('Personal cultivation and use for private consumption is legal following a 2018 Constitutional Court ruling.', 'Public consumption and sale remain restricted.'),
   MLT: g('Adults may grow up to 4 plants at home for personal use.', 'Up to 7g in public, up to 50g at home.'),
   LUX: g('Adults may grow up to 4 plants per household for personal use.', 'Small personal-use amounts.'),
-  DEU: g('Adults may grow up to 3 plants per household (2024 reform).', 'Up to 25g in public, up to 50g at home.'),
+  DEU: g('Adults may grow up to 3 plants per person (2024 reform) — a two-adult household can have up to 6 plants total, kept secure from minors.', 'Up to 25g in public, up to 50g at home.'),
   NLD: g('Home growing up to 5 plants per household is tolerated under a long-standing non-enforcement policy, not full statutory legalization.', 'Small personal-use amounts.', 'This is a "tolerance policy" (gedoogbeleid), not a codified legal right — enforcement discretion could change.'),
   CZE: g('Adults may grow up to 3 plants for personal use under a 2024 reform.', 'Possession decriminalized up to a set personal-use threshold.'),
-  MEX: g('The Supreme Court has ruled personal cultivation and possession must be permitted; individuals typically need court authorization ("amparo") since comprehensive regulations are still pending.', 'Small personal-use amounts are decriminalized.', 'Full regulatory framework is still a work in progress — process and limits can vary.'),
+  MEX: g('Following Supreme Court rulings, adults may apply to COFEPRIS (the federal health/sanitary regulator) for a self-consumption permit allowing cultivation of up to 6 plants at home.', 'Personal-use possession (~28g) is decriminalized.', "Congress still hasn't passed implementing legislation, so there's no commercial/retail market — only court-protected personal use and COFEPRIS-permitted home cultivation."),
   JAM: g('Registered households (including for Rastafari religious use) may grow up to 5 plants per household without a license.', 'Up to 2 oz decriminalized.'),
-  THA: g('Home cultivation has generally been permitted since 2022 decriminalization, though the regulatory framework has changed direction more than once.', 'Rules have shifted repeatedly — verify the current framework before growing.', 'Thailand\'s cannabis regulations have been unusually volatile — double-check current rules before relying on this.'),
+  THA: r('Thailand reversed course in June 2025, reclassifying cannabis flower as a controlled herb and re-criminalizing recreational use — reversing its 2022 decriminalization. Cannabis is now restricted to a strict medical-only framework: possession, cultivation, and use require a valid prescription (max 30 days) from a certified practitioner.', 'Violations can carry up to 1 year imprisonment and a 20,000 baht fine.', "Thailand's cannabis rules have been unusually volatile — this is a full reversal from the country's prior decriminalized status, not a minor adjustment. Always confirm the current framework before assuming anything is permitted."),
   COL: g('Personal cultivation of up to 20 plants for personal consumption (not for sale) is permitted.', 'Small personal-use amounts (~20g) are decriminalized.'),
   ESP: r('Cultivation is not codified as a legal right. Private, personal-use cultivation via registered "cannabis social clubs" is tolerated under case law, but public cultivation, sale, and trafficking remain criminal offenses.', 'Private club-based cultivation exists in a legal gray area — it is tolerated in practice more than clearly legalized.'),
   CHE: r('Standard-THC cannabis cultivation remains illegal outside limited government pilot sales programs. Only low-THC hemp is broadly legal.', 'A few city-level pilot programs allow limited legal purchase, but general home cultivation is not permitted.'),
